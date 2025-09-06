@@ -9,4 +9,4 @@ class UserRepository(BaseRepository):
         super().__init__(session, User)
 
     async def get_user_by_tg_id(self, tg_id):
-        return await self.get(tg_id=tg_id)
+        return await self.get_by_pk(tg_id=tg_id)

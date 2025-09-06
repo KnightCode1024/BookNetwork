@@ -16,7 +16,9 @@ class BaseRepository:
         return entity
 
     async def get(self, id):
-        result = await self.session.execute(select(self.model).where(self.id == id))
+        result = await self.session.execute(
+            select(self.model).where(self.model.id == id)
+        )
         return result.scalar_one_or_none()
 
     async def get_by_pk(self, **pk_filters):
