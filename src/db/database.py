@@ -1,5 +1,9 @@
-from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine
-from core.config import settings
+from sqlalchemy.ext.asyncio import (
+    async_sessionmaker,
+    create_async_engine,
+    AsyncSession,
+)
+from config.config import settings
 
 DATABASE_URL = settings.database.get_db_url()
 
@@ -13,15 +17,5 @@ async_session_maker = async_sessionmaker(
 )
 
 
-def connection(method):
-    async def wrapper(*args, **kwargs):
-        async with async_session_maker() as session:
-            try:
-                return await method(*args, session=session, **kwargs)
-            except Exception as e:
-                await session.rollback()
-                raise e
-            finally:
-                await session.close()
-
-    return wrapper
+async def get_async_session() -> AsyncSession:
+    return async_session_maker()

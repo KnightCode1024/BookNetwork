@@ -2,8 +2,8 @@ import asyncio
 import logging
 from aiogram import Bot, Dispatcher
 
-from core.config import settings
-from handlers.users import router as user_router
+from config.config import settings
+from handlers.handlers import router
 
 
 async def main():
@@ -12,7 +12,7 @@ async def main():
     dp = Dispatcher()
 
     dp.include_routers(
-        user_router,
+        router,
     )
 
     await dp.start_polling(bot)

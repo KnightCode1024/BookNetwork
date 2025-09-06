@@ -22,9 +22,11 @@ class User(Base):
         nullable=True,
     )
 
-    user_book: Mapped["UserBook"] = relationship(
-        back_populates="users_books",
-    )
-    collections: Mapped[List["Collection"]] = relationship(
+    user_books: Mapped[List["UserBook"]] = relationship(
         back_populates="user",
+        cascade="all, delete-orphan",
+    )
+
+    collections: Mapped[List["Collection"]] = relationship(
+        back_populates="user", cascade="all, delete-orphan"
     )

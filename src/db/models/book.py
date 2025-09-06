@@ -30,6 +30,7 @@ class Book(Base):
         secondary=books_genres,
         back_populates="books",
     )
-    user_book: Mapped["UserBook"] = relationship(
-        back_populates="books",
+    user_books: Mapped[List["UserBook"]] = relationship(
+        back_populates="book",
+        cascade="all, delete-orphan",
     )
