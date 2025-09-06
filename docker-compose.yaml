@@ -1,13 +1,11 @@
 services:
   postgres:
-    image: postgres:17-bookworm
+    image: postgres:17-alpine
     container_name: postgres
     volumes:
       - postgres-data:/var/lib/postgresql/data
     ports:
-      - "54320:54320"
-    env_file:
-      - .env
+      - "5432:5432"
     environment:
       - POSTGRES_DB=${POSTGRES_NAME}
       - POSTGRES_USER=${POSTGRES_USER}
@@ -21,7 +19,7 @@ services:
       - app-network
 
   redis:
-    image: redis:8-bookworm
+    image: redis:8-alpine
     container_name: redis
     restart: always
     ports:
@@ -31,6 +29,20 @@ services:
     networks:
       - app-network
 
+  pgadmin4:
+    image: elestio/pgadmin
+    container_name: pgadmin4
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${ADMIN_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${ADMIN_PASSWORD}
+      PGADMIN_LISTEN_PORT: 8080
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./servers.json:/pgadmin4/servers.json
+    networks:
+      - app-network
 
   bot:
     build: .
@@ -47,7 +59,6 @@ services:
       - redis
     networks:
       - app-network
-
 
 volumes:
   postgres-data:

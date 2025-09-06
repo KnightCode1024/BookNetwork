@@ -17,5 +17,5 @@ books_genres = Table(
         Integer,
         ForeignKey("genres.id"),
         primary_key=True,
-    )
+    ),
 )

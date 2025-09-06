@@ -7,7 +7,7 @@ from db.models.base import Base
 
 
 class User(Base):
-    tg_username: Mapped[int] = mapped_column(
+    tg_id: Mapped[int] = mapped_column(
         BigInteger,
     )
     username: Mapped[str] = mapped_column(
