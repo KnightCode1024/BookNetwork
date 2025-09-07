@@ -1,18 +1,28 @@
 import asyncio
 import logging
 from aiogram import Bot, Dispatcher
+from aiogram.fsm.storage.redis import RedisStorage
+from redis.asyncio import Redis
+
 
 from config.config import settings
-from handlers.handlers import router
+from handlers.user import router as user_router
+from handlers.book import router as book_router
 
 
 async def main():
-    logging.basicConfig(level=logging.INFO)
+    if settings.bot.DEBUG:
+        logging.basicConfig(level=logging.INFO)
+
+    redis = Redis(host=settings.redis.HOST)
+    storage = RedisStorage(redis=redis)
+
     bot = Bot(token=settings.bot.TOKEN)
-    dp = Dispatcher()
+    dp = Dispatcher(storage=storage)
 
     dp.include_routers(
-        router,
+        user_router,
+        book_router,
     )
 
     await dp.start_polling(bot)

@@ -15,7 +15,7 @@ class UserService:
         first_name: Optional[str] = None,
         last_name: Optional[str] = None,
     ):
-        user = await self.user_repository.get_by_tg_id(tg_id)
+        user = await self.user_repository.get_user_by_tg_id(tg_id)
 
         if not user:
             new_user = User(
@@ -50,7 +50,3 @@ class UserService:
             return {"action": "updated", "user": updated_user}
 
         return {"action": "skipped", "user": user}
-
-
-# user_repo = UserRepository(UserRepository)
-# user_service = UserService(user_repo)

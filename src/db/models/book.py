@@ -1,7 +1,7 @@
 from typing import List
 
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-from sqlalchemy import String, ForeignKey
+from sqlalchemy import String, ForeignKey, Integer
 
 from db.models.base import Base
 from db.models.association import books_genres
@@ -14,8 +14,8 @@ class Book(Base):
     description: Mapped[str] = mapped_column(
         String,
     )
-    year: Mapped[str] = mapped_column(
-        String,
+    year: Mapped[int] = mapped_column(
+        Integer,
     )
 
     author_id: Mapped[int] = mapped_column(

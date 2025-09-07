@@ -2,8 +2,6 @@ from aiogram import Router
 from aiogram.filters import CommandStart
 from aiogram.types import Message
 
-# from schemas.user import UserCreate
-# from services.user import user_service
 from db.database import get_async_session
 from db.repositories.user import UserRepository
 from services.user import UserService

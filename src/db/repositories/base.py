@@ -1,5 +1,3 @@
-# from abc import abstractmethod, ABC
-
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, update
 
@@ -36,13 +34,7 @@ class BaseRepository:
         result = await self.session.execute(query)
         return result.scalar_one_or_none()
 
-    async def get_by_id(self, id):
-        return await self.get_by_pk(id=id)
-
-    async def get_by_tg_id(self, tg_id):
-        return await self.get_by_pk(tg_id=tg_id)
-
-    async def get_all(self, skip: int = 0, limit: int = 20):
+    async def get_all(self, skip: int = 0, limit: int = 100):
         result = await self.session.execute(
             select(self.model).offset(skip).limit(limit)
         )
@@ -81,6 +73,3 @@ class BaseRepository:
 
         await self.session.delete(entity)
         await self.session.commit()
-
-    # async def delete_all(self):
-    #     pass

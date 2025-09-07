@@ -1,3 +1,5 @@
+from typing import Optional
+
 from pathlib import Path
 
 from pydantic_settings import BaseSettings, SettingsConfigDict
@@ -6,13 +8,24 @@ ENV_DIR = Path(__file__).resolve().parent.parent.parent.parent
 
 
 class Bot(BaseSettings):
+    TOKEN: str
+    DEBUG: Optional[int] = 0
+
     model_config = SettingsConfigDict(
         env_prefix="BOT_",
         env_file=(ENV_DIR / ".env"),
         env_file_encoding="utf-8",
     )
 
-    TOKEN: str
+
+class Redis(BaseSettings):
+    HOST: Optional[str] = "redis"
+
+    model_config = SettingsConfigDict(
+        env_prefix="REDIS_",
+        env_file=(ENV_DIR / ".env"),
+        env_file_encoding="utf-8",
+    )
 
 
 class Database(BaseSettings):
@@ -43,6 +56,7 @@ class Settings(BaseSettings):
 
     bot: Bot = Bot()
     database: Database = Database()
+    redis: Redis = Redis()
 
 
 settings = Settings()
