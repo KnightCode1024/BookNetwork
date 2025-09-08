@@ -1,7 +1,6 @@
 from aiogram.utils.keyboard import InlineKeyboardBuilder
 
 from services.genre import GenreService
-from db.repositories.genre import GenreRepository
 from db.database import get_async_session
 
 
@@ -9,8 +8,7 @@ async def chose_genre_inline_keyboard():
     builder = InlineKeyboardBuilder()
 
     session = await get_async_session()
-    genre_repository = GenreRepository(session)
-    genre_service = GenreService(genre_repository)
+    genre_service = GenreService(session)
 
     genres = await genre_service.get_all_genres()
 

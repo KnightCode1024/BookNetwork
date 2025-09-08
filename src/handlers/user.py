@@ -3,7 +3,7 @@ from aiogram.filters import CommandStart
 from aiogram.types import Message
 
 from db.database import get_async_session
-from db.repositories.user import UserRepository
+# from db.repositories.user import UserRepository
 from services.user import UserService
 
 
@@ -19,8 +19,7 @@ async def cmd_start(message: Message):
     tg_id = user.id
 
     session = await get_async_session()
-    user_repository = UserRepository(session)
-    user_service = UserService(user_repository)
+    user_service = UserService(session)
 
     result = await user_service.register_or_update_user(
         tg_id=tg_id,

@@ -1,12 +1,14 @@
 from typing import Optional
 
+from sqlalchemy.ext.asyncio import AsyncSession
+
 from db.models.user import User
 from db.repositories.user import UserRepository
 
 
 class UserService:
-    def __init__(self, user_repository: UserRepository):
-        self.user_repository = user_repository
+    def __init__(self, session: AsyncSession):
+        self.user_repository = UserRepository(session)
 
     async def register_or_update_user(
         self,
