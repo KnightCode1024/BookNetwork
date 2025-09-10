@@ -36,7 +36,7 @@ async def cmd_add_book(
 
 @router.message(
     Command("cancel"),
-    ~StateFilter(default_state),
+    StateFilter(default_state),
 )
 async def cancel_add_book_state(
     message: Message,
@@ -81,7 +81,6 @@ async def add_book_description_handler(
 ):
     await state.update_data(book_description=message.text)
 
-    # После описания показываем клавиатуру для выбора жанра
     keyboard = await chose_genre_inline_keyboard()
     await message.answer(
         text="Пожалуйста, выберите жанр книги:",
@@ -103,7 +102,6 @@ async def process_genre_selection(
     genre_id = int(callback.data.split(":")[1])
     await state.update_data(genre=genre_id)
 
-    # Убираем клавиатуру и просим ввести год
     await callback.message.edit_text(
         text="Жанр выбран. Пожалуйста, введите год написания книги."
     )
@@ -191,10 +189,6 @@ async def add_author_patronymic_handler(
     )
 
     data = await state.get_data()
-
-    # session = await get_async_session()
-    # book_repository = BookRepository(session)
-    # book_service = BookService(user_repository)
 
     await message.answer(
         text=f"Книга добавлена!\n\n"

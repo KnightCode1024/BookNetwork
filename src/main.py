@@ -7,7 +7,7 @@ from redis.asyncio import Redis
 
 from config.config import settings
 from handlers.user import router as user_router
-from handlers.book import router as book_router
+from handlers.add_book import router as add_book_router
 
 
 async def main():
@@ -22,7 +22,7 @@ async def main():
 
     dp.include_routers(
         user_router,
-        book_router,
+        add_book_router,
     )
 
     await dp.start_polling(bot)
