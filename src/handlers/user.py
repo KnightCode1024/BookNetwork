@@ -3,7 +3,6 @@ from aiogram.filters import CommandStart
 from aiogram.types import Message
 
 from db.database import get_async_session
-# from db.repositories.user import UserRepository
 from services.user import UserService
 
 

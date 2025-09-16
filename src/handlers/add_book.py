@@ -11,7 +11,6 @@ from aiogram.types import CallbackQuery
 from states.book import AddBookState
 from db.database import get_async_session
 from services.book import BookService
-from db.repositories.book import BookRepository
 from keyboards.inline_chose_genre import chose_genre_inline_keyboard
 
 router = Router()
@@ -190,15 +189,37 @@ async def add_author_patronymic_handler(
 
     data = await state.get_data()
 
-    await message.answer(
-        text=f"Книга добавлена!\n\n"
-        f"Название: {data.get('book_title')}\n"
-        f"Описание: {data.get('book_description')}\n"
-        f"Жанр: {data.get('genre')}\n"
-        f"Год: {data.get('book_year')}\n"
-        f"Имя автора: {data.get('author_first_name')}\n"
-        f"Фамилия автора: {data.get('author_last_name')}\n"
-        f"Отчество автора: {data.get('author_patronymic')}\n"
-    )
+    book_name = data.get("book_title")
+    book_description = data.get("book_description")
+    book_genre = data.get("genre")
+    book_year = data.get("book_year")
+    author_first_name = data.get("author_first_name")
+    author_last_name = data.get("author_last_name")
+    author_patronymic = data.get("author_patronymic")
+
+    session = await get_async_session()
+    book_service = BookService(session)
+
+    result = book_service.add_book(
+        book_title=book_name,
+        book_dedcription=book_description,
+        book_genre=book_genre,
+        book_year=book_year,
+        author_first_name=author_first_name,
+        author_last_name=author_last_name,
+        author_patronymic=author_patronymic,
+        )
+    
+    if result:
+        await message.answer(
+            text="Спасибо. Книга добавлена.",
+            )
+    else:
+        await message.answer(
+            text=(
+                "Произошла ошибка при дабовлении книги.", 
+                "Попробуйте ещё раз.",
+                ),
+            )
 
     await state.clear()
