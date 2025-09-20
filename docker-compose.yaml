@@ -1,7 +1,6 @@
 services:
   postgres:
     image: postgres:17-alpine
-    container_name: postgres
     volumes:
       - postgres-data:/var/lib/postgresql/data
     ports:
@@ -15,55 +14,20 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
-    networks:
-      - app-network
 
-  redis:
-    image: redis:8-alpine
-    container_name: redis
+  backend:
+    build: ./backend
+    image: backend
     restart: always
-    ports:
-      - "6379:6379"
-    volumes:
-      - redis-data:/data
-    networks:
-      - app-network
-
-  pgadmin4:
-    image: elestio/pgadmin
-    container_name: pgadmin4
-    restart: always
-    environment:
-      PGADMIN_DEFAULT_EMAIL: ${ADMIN_EMAIL}
-      PGADMIN_DEFAULT_PASSWORD: ${ADMIN_PASSWORD}
-      PGADMIN_LISTEN_PORT: 8080
-    ports:
-      - "8080:8080"
-    volumes:
-      - ./servers.json:/pgadmin4/servers.json
-    networks:
-      - app-network
-
-  bot:
-    build: .
-    image: bot
-    container_name: bot
-    restart: always
-    command: ["sh", "./entrypoint.sh"]
+    command: sh -c "cd booknetwork && python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
     env_file:
       - .env
     volumes:
-      - ./src:/app/src
+      - ./backend:/app/www/backend
+    ports:
+        - "8000:8000"
     depends_on:
       - postgres
-      - redis
-    networks:
-      - app-network
 
 volumes:
   postgres-data:
-  redis-data:
-
-networks:
-  app-network:
-    driver: bridge
