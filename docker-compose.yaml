@@ -3,6 +3,7 @@ services:
     image: postgres:17-alpine
     volumes:
       - postgres-data:/var/lib/postgresql/data
+
     ports:
       - "5432:5432"
     environment:
@@ -16,14 +17,14 @@ services:
       retries: 5
 
   backend:
-    build: ./backend
-    image: backend
+    build: ./booknetwork
+    image: booknetwork
     restart: always
-    command: sh -c "cd booknetwork && python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
+    command: sh -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
     env_file:
       - .env
     volumes:
-      - ./backend:/app/www/backend
+      - ./booknetwork:/app/www/booknetwork
     ports:
         - "8000:8000"
     depends_on:
