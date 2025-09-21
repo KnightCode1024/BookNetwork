@@ -31,6 +31,8 @@ INSTALLED_APPS = [
     # ---
     "rest_framework",
     # ---
+    "api.v1.ping",
+    "apps.ping_ssr",
 ]
 
 MIDDLEWARE = [

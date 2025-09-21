@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/htmx.org@2.0.7/dist/htmx.min.js"></script>
+    <title>Проверка состояния приложения</title>
+</head>
+<body>
+    <div class="container">
+        <div class="status" id="message">
+            <span class="loading">Загрузка...</span>
+        </div>
+
+        <div hx-get="/api/v1/ping/"
+             hx-trigger="load"
+             hx-target="#message"
+             hx-swap="innerHTML">
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('htmx:afterOnLoad', function(evt) {
+            if (evt.detail.xhr.responseURL.includes('/ping/')) {
+                try {
+                    const response = JSON.parse(evt.detail.xhr.responseText);
+                    const messageDiv = document.getElementById('message');
+
+                    if (response.message) {
+                        messageDiv.innerHTML = `
+                            <span class="success">✓ Сервер отвечает: </span>
+                            <br>
+                            <strong>"${response.message}"</strong>
+                        `;
+                        messageDiv.classList.add('success');
+                    }
+                } catch (e) {
+                    console.error('Ошибка обработки ответа:', e);
+                    document.getElementById('message').innerHTML =
+                        '<span style="color: red;">Ошибка получения данных</span>';
+                }
+            }
+        });
+
+        document.addEventListener('htmx:responseError', function(evt) {
+            const messageDiv = document.getElementById('message');
+            messageDiv.innerHTML = `
+                <span style="color: red;">❌ Ошибка соединения с сервером</span>
+                <br>
+                <small>Проверьте подключение к интернету</small>
+            `;
+        });
+    </script>
+</body>
+</html>
