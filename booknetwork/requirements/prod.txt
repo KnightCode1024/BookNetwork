@@ -8,3 +8,4 @@ celery==5.5.3
 redis==6.4.0
 flower==2.0.1
 django-cors-headers==4.9.0
+drf-yasg==1.21.11

@@ -35,11 +35,14 @@ INSTALLED_APPS = [
     "rest_framework_simplejwt",
     "djoser",
     "corsheaders",
+    "drf_yasg",
     # Developer Apps
     "api.v1.ping",
     "api.v1.core",
     "api.v1.users",
-    # "api.v1.posts",
+    "api.v1.posts",
+    "api.v1.books",
+    "api.v1.reviews",
 ]
 
 MIDDLEWARE = [
@@ -94,18 +97,18 @@ DATABASES = {
 AUTH_PASSWORD_VALIDATORS = [
     {
         "NAME": (
-            "django.contrib.auth.password_validation."
-            "UserAttributeSimilarityValidator"
+            "django.contrib.auth.password_validation"
+            ".UserAttributeSimilarityValidator"
         ),
     },
     {
-        "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
+        "NAME": ("django.contrib.auth.password_validation." "MinimumLengthValidator"),
     },
     {
-        "NAME": "django.contrib.auth.password_validation.CommonPasswordValidator",
+        "NAME": ("django.contrib.auth.password_validation." "CommonPasswordValidator"),
     },
     {
-        "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
+        "NAME": ("django.contrib.auth.password_validation." "NumericPasswordValidator"),
     },
 ]
 
@@ -170,7 +173,6 @@ DJOSER = {
 }
 
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
-# EMAIL_BACKEND = 'djcelery_email.backends.CeleryEmailBackend'
 CELERY_EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 
 EMAIL_HOST = os.getenv("EMAIL_HOST", "smtp.yandex.ru")

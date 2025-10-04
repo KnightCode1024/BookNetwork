@@ -3,9 +3,21 @@ from django.urls import path, include
 
 from django.views.generic import RedirectView
 
+
 urlpatterns = [
-    path("", RedirectView.as_view(url="/api/v1/ping/", permanent=False)),
-    path("admin/", admin.site.urls),
-    path("api/", include("api.urls")),
-    # path("ping", include("apps.ping_ssr.urls")),
+    path(
+        "",
+        RedirectView.as_view(
+            url="/api/v1/ping/",
+            permanent=False,
+        ),
+    ),
+    path(
+        "admin/",
+        admin.site.urls,
+    ),
+    path(
+        "api/",
+        include("api.urls"),
+    ),
 ]

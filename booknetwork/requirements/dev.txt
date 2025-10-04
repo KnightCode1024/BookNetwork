@@ -1,2 +1,2 @@
 -r prod.txt
--r test.rxt
+-r test.txt

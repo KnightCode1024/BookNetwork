@@ -91,17 +91,16 @@ services:
     environment:
       - DJANGO_SECRET_KEY=${DJANGO_SECRET_KEY}
       - CELERY_BROKER_URL=${CELERY_BROKER_URL}
-
-  frontend:
-    build: ./booknetwork_frontend
-    container_name: frontend
-    ports:
-      - "3000:3000"
-    environment:
-      - VUE_APP_API_BASE_URL=http://localhost:8000/api/v1
-      - VUE_APP_FRONTEND_URL=http://localhost:3000
-    depends_on:
-      - backend
+  # frontend:
+  #   build: ./booknetwork_frontend
+  #   container_name: frontend
+  #   ports:
+  #     - "3000:3000"
+  #   environment:
+  #     - VUE_APP_API_BASE_URL=http://localhost:8000/api/v1
+  #     - VUE_APP_FRONTEND_URL=http://localhost:3000
+  #   depends_on:
+  #     - backend
 
 volumes:
   postgres-data:
