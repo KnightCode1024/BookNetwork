@@ -208,3 +208,6 @@ marimo/_lsp/
 __marimo__/
 
 servers.json/
+
+# Frontend
+/node_modules
