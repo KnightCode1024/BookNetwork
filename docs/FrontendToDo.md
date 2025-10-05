@@ -1,9 +1,9 @@
 # Список задач по проекту для фронтенда
 
-- [ ] Создание страницы активации аккаунта. При переходе по ссылке (<http://localhost:3000/activate/Mg/cx5qss-0614f1da938c48bf4d71cfd72f93e8d9>) из письма достаётся uid (Короткий) и token(Длинный) и делает запрос `POST http://127.0.0.1:8000/api/v1/auth/users/activation/`
+- [x] Создание страницы активации аккаунта. При переходе по ссылке (<http://localhost:3000/activate/Mg/cx5qss-0614f1da938c48bf4d71cfd72f93e8d9>) из письма достаётся uid (Короткий) и token(Длинный) и делает запрос `POST http://127.0.0.1:8000/api/v1/auth/users/activation/`
 c данными:
 
-```
+```json
 {
     "uid": "Mw",
     "token": "cwueue-918bc584bd16b41f9547b650b16d32e0"
