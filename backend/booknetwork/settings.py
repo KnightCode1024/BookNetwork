@@ -166,8 +166,8 @@ DJOSER = {
     ),
     "EMAIL": {
         "activation": "api.v1.users.emails.CustomActivationEmail",
+        "password_reset": "api.v1.users.emails.CustomPasswordResetEmail",
         # "confirmation": "accounts.email.CustomConfirmationEmail",
-        # "password_reset": "accounts.email.CustomPasswordResetEmail",
         # "password_changed_confirmation": "accounts.email.CustomPasswordChangedConfirmationEmail",
     },
 }
@@ -204,3 +204,4 @@ CELERY_RESULT_SERIALIZER = "json"
 CELERY_TIMEZONE = "UTC"
 
 FRONTEND_URL = os.getenv("FRONTEND_URL", "http://localhost:3000")
+BACKEND_URL = "127.0.0.1:8000/api/v1/"
