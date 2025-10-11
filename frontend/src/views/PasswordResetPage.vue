@@ -288,26 +288,27 @@ export default {
   align-items: center;
   justify-content: center;
   padding: 20px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: #f5f5f5;
 }
 
 .container {
   width: 100%;
-  max-width: 450px;
+  max-width: 400px;
 }
 
 .card {
   background: white;
-  border-radius: 12px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   overflow: hidden;
 }
 
 .card-header {
-  background: #4f46e5;
-  color: white;
-  padding: 30px;
+  background: #f8f9fa;
+  color: #333;
+  padding: 20px;
   text-align: center;
+  border-bottom: 1px solid #dee2e6;
 }
 
 .card-header h1 {
@@ -317,7 +318,7 @@ export default {
 }
 
 .card-body {
-  padding: 40px;
+  padding: 20px;
 }
 
 .description {

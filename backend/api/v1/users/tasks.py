@@ -4,7 +4,7 @@ from django.conf import settings
 from django.contrib.auth import get_user_model
 
 
-@shared_task(bind=True, max_retries=3)
+@shared_task
 def send_activation_email(user_id, context):
     try:
         User = get_user_model()
@@ -12,7 +12,7 @@ def send_activation_email(user_id, context):
 
         subject = "Активация аккаунта в сервисе Переплёт"
 
-        activation_url = context.get("url", "")
+        activation_url = context.get("url")
 
         message = f"""
         Здравствуйте, {user.get_full_name() or user.username}!
@@ -36,7 +36,7 @@ def send_activation_email(user_id, context):
         raise e
 
 
-@shared_task(bind=True, max_retries=3)
+@shared_task
 def send_password_reset_email(user_id, context):
     try:
         User = get_user_model()

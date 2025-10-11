@@ -10,6 +10,7 @@ class CustomActivationEmail(email.ActivationEmail):
             user = context.get("user")
 
             if user and user.id:
+
                 activation_url = (
                     f"{settings.FRONTEND_URL}/activate/"
                     f"{context.get('uid')}/{context.get('token')}"
@@ -24,8 +25,8 @@ class CustomActivationEmail(email.ActivationEmail):
                 }
 
                 send_activation_email.delay(
-                    user_id=user.id,
-                    context=celery_context,
+                    user.id,
+                    celery_context,
                 )
 
             else:
@@ -56,8 +57,8 @@ class CustomPasswordResetEmail(email.PasswordResetEmail):
                     "site_name": "BookNetwork",
                 }
                 send_password_reset_email.delay(
-                    user_id=user.id,
-                    context=celery_context,
+                    user.id,
+                    celery_context,
                 )
             else:
                 super().send(to, *args, **kwargs)
