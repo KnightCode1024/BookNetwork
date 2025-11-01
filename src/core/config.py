@@ -24,6 +24,17 @@ class DatabaseConfig(BaseSettings):
             f"{self.HOST}:{self.PORT}/{self.NAME}"
         )
 
+class RedisConfig(BaseSettings):
+    HOST: str
+    PORT: int
+
+    model_config = SettingsConfigDict(
+        env_prefix="REDIS_",
+        env_file=ENV_PATH,
+        env_file_encoding="utf-8",
+    )
+
+
 class AppConfig(BaseSettings):
     HOST: str
     PORT: int
@@ -49,5 +60,6 @@ class Config(BaseSettings):
 
     database: DatabaseConfig = DatabaseConfig()
     app: AppConfig = AppConfig()
+    redis: RedisConfig = RedisConfig()
 
 config = Config()
