@@ -35,6 +35,13 @@ class RedisConfig(BaseSettings):
     )
 
 
+class AuthJWT(BaseSettings):
+    PRIVATE_KEY: Path = BASE_DIR / "certs" / "jwt-private.pem"
+    PUBLIC_KEY: Path = BASE_DIR / "certs" / "jwt-public.pem"
+    ALGORITM: str = "RS256"
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = 15
+
+
 class AppConfig(BaseSettings):
     HOST: str
     PORT: int
@@ -61,5 +68,6 @@ class Config(BaseSettings):
     database: DatabaseConfig = DatabaseConfig()
     app: AppConfig = AppConfig()
     redis: RedisConfig = RedisConfig()
+    auth_jwt: AuthJWT = AuthJWT()
 
 config = Config()

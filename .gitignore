@@ -211,3 +211,6 @@ servers.json/
 
 # Frontend
 /node_modules
+
+# CERTS
+/certs
