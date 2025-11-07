@@ -9,19 +9,19 @@ from models import Base
 
 class IRepository(ABC):
     @abstractmethod
-    def get_by_id(self, id: int) -> Optional[Base]: ...
+    async def get_by_id(self, id: int) -> Optional[Base]: ...
 
     @abstractmethod
-    def get_all(self, offset: int = 0, limit: int = 20) -> List[Base]: ...
+    async def get_all(self, offset: int = 0, limit: int = 20) -> List[Base]: ...
 
     @abstractmethod
-    def create(self, data: dict) -> Base: ...
+    async def create(self, data: dict) -> Base: ...
 
     @abstractmethod
-    def update(self, id: int, data: dict) -> Optional[Base]: ...
+    async def update(self, id: int, data: dict) -> Optional[Base]: ...
 
     @abstractmethod
-    def delete(self, id: int) -> bool: ...
+    async def delete(self, id: int) -> bool: ...
 
 class BaseRepository(IRepository):
     def __init__(self, model: Base, session: AsyncSession):
@@ -42,7 +42,7 @@ class BaseRepository(IRepository):
 
     async def create(self, data: dict):
         instance = self.model(**data)
-        await self.session.add(instance)
+        self.session.add(instance)
         await self.session.commit()
         await self.session.refresh(instance)
         return instance

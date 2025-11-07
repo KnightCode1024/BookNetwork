@@ -1,14 +1,18 @@
-from fastapi import Form, HTTPException, status
+from fastapi import Depends, HTTPException, status
+from sqlalchemy.ext.asyncio import AsyncSession
 
-from utils import auth_utils
+from dependencies.db import get_db_session
+from services.user_service import UserService
 
-def validate_auth_user(
-    username: str = Form(),
-    password: str = Form(),
+async def get_current_user(
+    token: str,
+    session: AsyncSession = Depends(get_db_session),
 ):
-    unauthed_exc = HTTPException(
-        status_code=status.HTTP_401_UNAUTHORIZED,
-        detail="invalid username or password"
-    )
-
-    
+    user_service = UserService(session)
+    user = await user_service.verify_token(token)
+    if not user:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid or expired token",
+        )
+    return user

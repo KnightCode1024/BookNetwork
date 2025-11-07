@@ -32,7 +32,7 @@ services:
     build: ./src
     container_name: backend
     restart: always
-    command: sh -c "python main.py"
+    command: sh -c "alembic upgrade head && python main.py"
     env_file:
       - .env
     volumes:

@@ -10,14 +10,18 @@ def encode_jwt(
     private_key: str = config.auth_jwt.PRIVATE_KEY.read_text(),
     algorithm: str = config.auth_jwt.ALGORITM,
     expire_timedelta: timedelta | None = None,
-    expire_minutes: int = config.auth_jwt.ACCESS_TOKEN_EXPIRE_MINUTES,
-    ):
+    expire_minutes: int = None,
+):
     to_encode = payload.copy()
     now = datetime.utcnow()
+    
     if expire_timedelta:
         expire = now + expire_timedelta
-    else:
+    elif expire_minutes:
         expire = now + timedelta(minutes=expire_minutes)
+    else:
+        expire = now + timedelta(minutes=config.auth_jwt.ACCESS_TOKEN_EXPIRE_MINUTES)
+    
     to_encode.update(
         exp=expire,
         iat=now,
@@ -37,22 +41,30 @@ def decode_jwt(
     decoded = jwt.decode(
         token,
         public_key,
-        algorithms=[algorithm],
+        algorithms=[algorithm]
     )
     return decoded
 
-def hash_password(
-    password: str
-) -> bytes:
+def create_access_token(data: dict) -> str:
+    return encode_jwt(
+        payload=data,
+        expire_minutes=config.auth_jwt.ACCESS_TOKEN_EXPIRE_MINUTES
+    )
+
+def create_refresh_token(data: dict) -> str:
+    return encode_jwt(
+        payload=data,
+        expire_timedelta=timedelta(days=config.auth_jwt.REFRESH_TOKEN_EXPIRE_DAYS)
+    )
+
+def hash_password(password: str) -> str:
     salt = bcrypt.gensalt()
     pwd_bytes: bytes = password.encode()
-    return bcrypt.hashpw(pwd_bytes, salt)
+    hashed_bytes = bcrypt.hashpw(pwd_bytes, salt)
+    return hashed_bytes.decode('utf-8')
 
-def validate_password(
-    password: str,
-    hashed_password: bytes,
-) -> bool:
+def validate_password(password: str, hashed_password: str) -> bool:
     return bcrypt.checkpw(
         password=password.encode(),
-        hashed_password=hashed_password,
+        hashed_password=hashed_password.encode('utf-8'),
     )

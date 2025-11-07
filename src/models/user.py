@@ -2,9 +2,8 @@ from typing import List
 
 from sqlalchemy.orm import Mapped, mapped_column
 from email_validator import validate_email, EmailNotValidError
-from sqlalchemy.orm import relationship
+from sqlalchemy.orm import relationship, validates
 from sqlalchemy import String
-from pydantic import validator
 
 from models import Base
 
@@ -28,20 +27,15 @@ class User(Base):
     is_active: Mapped[bool] = mapped_column(
         default=True,
     )
-
-    otp_sessions: Mapped[List["OTPSession"]] = relationship(
-        "OTPSession",
-         back_populates="user",
-         )
-
     
-    @validator('email')
-    def validate_email_format(cls, v):
-        if not v:
+    @validates('email')
+    def validate_email_format(self, key, email):
+        if not email:
             raise ValueError('Email cannot be empty')
         
+        from email_validator import validate_email, EmailNotValidError
         try:
-            valid = validate_email(v, check_deliverability=False)
+            valid = validate_email(email, check_deliverability=False)
             return valid.email.lower()
         except EmailNotValidError as e:
             raise ValueError(f'Invalid email format: {str(e)}')
