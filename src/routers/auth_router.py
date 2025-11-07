@@ -3,7 +3,9 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from schemas.auth import TokenPair, LoginSchema, UserSchema, RefreshTokenSchema
 from dependencies.db import get_db_session
+from dependencies.auth import get_current_user
 from services.user_service import UserService
+from models import User
 
 router = APIRouter(prefix="/auth", tags=["AUTH"])
 
@@ -116,4 +118,15 @@ async def verify_token(
             "username": user.username,
             "email": user.email
         }
+    }
+
+    
+@router.get("/me")
+async def get_me(user: User = Depends(get_current_user)):
+    return {
+        "id": user.id,
+        "username": user.username,
+        "email": user.email,
+        "is_active": user.is_active,
+        "created_at": user.created_at,
     }

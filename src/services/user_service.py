@@ -121,8 +121,9 @@ class UserService:
 
     async def verify_token(self, token: str) -> Optional[User]:
         try:
+            from utils.auth_utils import decode_jwt
             payload = decode_jwt(token)
-            
+
             if payload.get("type") != "access":
                 return None
             
@@ -136,5 +137,6 @@ class UserService:
             
             return user
             
-        except Exception:
+        except Exception as e:
+            print(f"Token verification error: {e}")
             return None
