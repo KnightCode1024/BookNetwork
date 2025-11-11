@@ -1,8 +1,7 @@
 from typing import List
 
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.orm import Mapped, mapped_column, relationship, validates
 from email_validator import validate_email, EmailNotValidError
-from sqlalchemy.orm import relationship, validates
 from sqlalchemy import String
 
 from models import Base
