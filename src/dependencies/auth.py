@@ -8,6 +8,7 @@ from services.user_service import UserService
 
 security = HTTPBearer()
 
+
 async def get_current_user(
     credentials: HTTPBearer = Depends(security),
     session: AsyncSession = Depends(get_db_session),
@@ -21,13 +22,14 @@ async def get_current_user(
         )
     return user
 
+
 async def get_token_from_header(authorization: Optional[str] = Header(None)) -> str:
     if not authorization:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Authorization header missing",
         )
-    
+
     try:
         scheme, token = authorization.split()
         if scheme.lower() != "bearer":
@@ -41,6 +43,7 @@ async def get_token_from_header(authorization: Optional[str] = Header(None)) -> 
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Invalid authorization header format",
         )
+
 
 async def get_current_user_manual(
     token: str = Depends(get_token_from_header),

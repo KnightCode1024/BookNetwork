@@ -6,6 +6,6 @@ DATABASE_URL = config.database.get_db_url
 
 engine = create_async_engine(url=DATABASE_URL)
 async_session_maker = async_sessionmaker(
-    engine, 
+    engine,
     expire_on_commit=False,
-    )
+)

@@ -23,6 +23,7 @@ class IRepository(ABC):
     @abstractmethod
     async def delete(self, id: int) -> bool: ...
 
+
 class BaseRepository(IRepository):
     def __init__(self, model: Base, session: AsyncSession):
         self.model = model
@@ -33,7 +34,7 @@ class BaseRepository(IRepository):
             select(self.model).where(self.model.id == id)
         )
         return result.scalar_one_or_none()
-    
+
     async def get_all(self, offset: int = 0, limit: int = 20):
         result = await self.session.execute(
             select(self.model).offset(offset).limit(limit)
@@ -69,5 +70,3 @@ class BaseRepository(IRepository):
             await self.session.commit()
             return True
         return False
-
-        

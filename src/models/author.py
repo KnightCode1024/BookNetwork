@@ -1,9 +1,10 @@
 from datetime import datetime
 
 from sqlalchemy import String, DateTime, Text
-from  sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.orm import Mapped, mapped_column
 
 from models import Base
+
 
 class Author(Base):
     name: Mapped[str] = mapped_column(String())

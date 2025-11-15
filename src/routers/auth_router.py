@@ -9,6 +9,7 @@ from models import User
 
 router = APIRouter(prefix="/auth", tags=["AUTH"])
 
+
 @router.post("/login/", response_model=TokenPair)
 async def auth_user(
     user_data: LoginSchema,
@@ -26,14 +27,15 @@ async def auth_user(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Invalid username or password",
         )
-    
+
     access_token, refresh_token = tokens
-    
+
     return TokenPair(
         access_token=access_token,
         refresh_token=refresh_token,
         token_type="Bearer",
     )
+
 
 @router.post("/register/", response_model=TokenPair)
 async def register_user(
@@ -43,36 +45,39 @@ async def register_user(
     user_service = UserService(session)
 
     try:
-        user = await user_service.create_user({
-            "username": user_data.username,
-            "email": user_data.email,
-            "password": user_data.password
-        })
-        
+        user = await user_service.create_user(
+            {
+                "username": user_data.username,
+                "email": user_data.email,
+                "password": user_data.password,
+            }
+        )
+
         tokens = await user_service.login_user(
             username=user_data.username,
             password=user_data.password,
         )
-        
+
         if not tokens:
             raise HTTPException(
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
                 detail="Failed to generate tokens",
             )
-        
+
         access_token, refresh_token = tokens
-        
+
         return TokenPair(
             access_token=access_token,
             refresh_token=refresh_token,
             token_type="Bearer",
         )
-        
+
     except ValueError as e:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail=str(e),
         )
+
 
 @router.post("/refresh/", response_model=TokenPair)
 async def refresh_tokens(
@@ -88,18 +93,19 @@ async def refresh_tokens(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Invalid or expired refresh token",
         )
-    
+
     access_token, refresh_token = tokens
-    
+
     return TokenPair(
         access_token=access_token,
         refresh_token=refresh_token,
         token_type="Bearer",
     )
 
+
 @router.post("/verify/")
 async def verify_token(
-    token_data: RefreshTokenSchema, 
+    token_data: RefreshTokenSchema,
     session: AsyncSession = Depends(get_db_session),
 ):
     user_service = UserService(session)
@@ -110,17 +116,13 @@ async def verify_token(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Invalid or expired token",
         )
-    
+
     return {
         "valid": True,
-        "user": {
-            "id": user.id,
-            "username": user.username,
-            "email": user.email
-        }
+        "user": {"id": user.id, "username": user.username, "email": user.email},
     }
 
-    
+
 @router.get("/me/")
 async def get_me(user: User = Depends(get_current_user)):
     return {

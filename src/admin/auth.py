@@ -16,17 +16,19 @@ class AdminAuth(AuthenticationBackend):
 
         session_generator = get_db_session()
         session = await anext(session_generator)
-        
+
         try:
             user_service = UserService(session)
             user = await user_service.authenticate_user(username, password)
-            
+
             if user and user.role == MyUserRole.ADMIN:
-                request.session.update({
-                    "user_id": user.id,
-                    "username": user.username,
-                    "role": user.role.value
-                })
+                request.session.update(
+                    {
+                        "user_id": user.id,
+                        "username": user.username,
+                        "role": user.role.value,
+                    }
+                )
                 return True
             return False
         except Exception:
@@ -45,9 +47,8 @@ class AdminAuth(AuthenticationBackend):
     async def authenticate(self, request: Request) -> Union[bool, RedirectResponse]:
         user_id = request.session.get("user_id")
         role = request.session.get("role")
-        
+
         if not user_id or role != MyUserRole.ADMIN.value:
             return False
-            
+
         return True
-        

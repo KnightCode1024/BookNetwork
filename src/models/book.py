@@ -5,6 +5,7 @@ from sqlalchemy import String, Text, ForeignKey, DateTime, Integer
 
 from models import Base
 
+
 class Book(Base):
     title: Mapped[str] = mapped_column(String())
     description: Mapped[str] = mapped_column(Text())
@@ -12,9 +13,9 @@ class Book(Base):
 
     author_id: Mapped[int] = mapped_column(
         ForeignKey(
-            "authors.id", 
+            "authors.id",
             ondelete="CASCADE",
-            ),
+        ),
         index=True,
     )
     genre_id: Mapped[int] = mapped_column(

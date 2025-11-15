@@ -1,8 +1,9 @@
 from pathlib import Path
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
-BASE_DIR = Path(__file__).parent.parent.parent 
+BASE_DIR = Path(__file__).parent.parent.parent
 ENV_PATH = BASE_DIR / ".env"
+
 
 class DatabaseConfig(BaseSettings):
     USER: str
@@ -24,6 +25,7 @@ class DatabaseConfig(BaseSettings):
             f"{self.HOST}:{self.PORT}/{self.NAME}"
         )
 
+
 class RedisConfig(BaseSettings):
     HOST: str
     PORT: int
@@ -39,8 +41,10 @@ class AuthJWT(BaseSettings):
     PRIVATE_KEY: Path = BASE_DIR / "certs" / "jwt-private.pem"
     PUBLIC_KEY: Path = BASE_DIR / "certs" / "jwt-public.pem"
     ALGORITM: str = "RS256"
-    ACCESS_TOKEN_EXPIRE_MINUTES: int = 60 * 24 * 90 # Для тестов значение установлено на 24 ч
-    REFRESH_TOKEN_EXPIRE_DAYS: int = 180 
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = (
+        60 * 24 * 90
+    )  # Для тестов значение установлено на 24 ч
+    REFRESH_TOKEN_EXPIRE_DAYS: int = 180
 
 
 class AppConfig(BaseSettings):
@@ -60,10 +64,11 @@ class AppConfig(BaseSettings):
         if self.DEBUG:
             return "debug"
         return "error"
-    
+
+
 class Config(BaseSettings):
     model_config = SettingsConfigDict(
-        env_file=ENV_PATH, 
+        env_file=ENV_PATH,
         env_file_encoding="utf-8",
     )
 
@@ -71,5 +76,6 @@ class Config(BaseSettings):
     app: AppConfig = AppConfig()
     redis: RedisConfig = RedisConfig()
     auth_jwt: AuthJWT = AuthJWT()
+
 
 config = Config()

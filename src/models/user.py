@@ -14,19 +14,20 @@ class MyUserRole(Enum):
     MODERATOR = "moderator"
     ADMIN = "admin"
 
+
 class User(Base):
     username: Mapped[str] = mapped_column(
         String(255),
-        nullable=False, 
+        nullable=False,
         unique=True,
         index=True,
-        )
+    )
     email: Mapped[str] = mapped_column(
         String(255),
-        nullable=False, 
+        nullable=False,
         unique=True,
         index=True,
-        )
+    )
     hashed_password: Mapped[str] = mapped_column(
         String(255),
     )
@@ -34,19 +35,18 @@ class User(Base):
         default=True,
     )
     role: Mapped[MyUserRole] = mapped_column(
-        SQLEnum(MyUserRole), 
+        SQLEnum(MyUserRole),
         nullable=False,
         default=MyUserRole.USER,
     )
-    
-    @validates('email')
+
+    @validates("email")
     def validate_email_format(self, key, email):
         if not email:
-            raise ValueError('Email cannot be empty')
-        
+            raise ValueError("Email cannot be empty")
+
         try:
             valid = validate_email(email, check_deliverability=False)
             return valid.email.lower()
         except EmailNotValidError as e:
-            raise ValueError(f'Invalid email format: {str(e)}')
-    
+            raise ValueError(f"Invalid email format: {str(e)}")
