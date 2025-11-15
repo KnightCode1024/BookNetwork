@@ -4,6 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from core.config import config
 from routers.auth_router import router as auth_router
+from routers.author_router import router as author_router
 
 app = FastAPI()
 
@@ -20,7 +21,13 @@ def index():
     return {"message": "ok"}
 
 
-app.include_router(auth_router)
+routers = [
+    auth_router, 
+    author_router,
+    ]
+
+for router in routers:
+    app.include_router(router)
 
 if __name__ == "__main__":
     uvicorn.run(

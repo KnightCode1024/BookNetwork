@@ -17,3 +17,9 @@ class Book(Base):
             ),
         index=True,
     )
+    genre_id: Mapped[int] = mapped_column(
+        ForeignKey(
+            "genres.id",
+            ondelete="CASCADE",
+        )
+    )

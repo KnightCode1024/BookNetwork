@@ -121,7 +121,7 @@ async def verify_token(
     }
 
     
-@router.get("/me")
+@router.get("/me/")
 async def get_me(user: User = Depends(get_current_user)):
     return {
         "id": user.id,
