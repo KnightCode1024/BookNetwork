@@ -1,12 +1,34 @@
 import uvicorn
+from sqladmin import Admin
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from starlette.middleware.sessions import SessionMiddleware 
 
 from core.config import config
 from routers.auth_router import router as auth_router
 from routers.author_router import router as author_router
+from core.database import engine
+from admin import (
+    UserAdmin, 
+    AuthorAdmin, 
+    BookAdmin, 
+    GenreAdmin, 
+    ReviewAdmin, 
+    AdminAuth,
+)
 
 app = FastAPI()
+
+app.add_middleware(SessionMiddleware, secret_key=config.app.SECRET_KEY)
+authentication_backend = AdminAuth(secret_key=config.app.SECRET_KEY)
+
+admin = Admin(
+    app, 
+    engine,
+    authentication_backend=authentication_backend, 
+    title="Админка Переплёта",
+    base_url="/admin",
+)
 
 app.add_middleware(
     CORSMiddleware,
@@ -16,15 +38,22 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-@app.get("/")
-def index():
-    return {"message": "ok"}
-
 
 routers = [
     auth_router, 
     author_router,
     ]
+
+tables = [
+    UserAdmin, 
+    AuthorAdmin, 
+    BookAdmin, 
+    GenreAdmin, 
+    ReviewAdmin,
+]
+
+for table in tables:
+    admin.add_view(table)
 
 for router in routers:
     app.include_router(router)

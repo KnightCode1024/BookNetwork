@@ -1,14 +1,14 @@
 from datetime import datetime
 
 from sqlalchemy.orm import Mapped, mapped_column
-from sqlalchemy import String, Text, ForeignKey, DateTime
+from sqlalchemy import String, Text, ForeignKey, DateTime, Integer
 
 from models import Base
 
 class Book(Base):
     title: Mapped[str] = mapped_column(String())
     description: Mapped[str] = mapped_column(Text())
-    publication_year: Mapped[datetime] = mapped_column(DateTime())
+    publication_year: Mapped[int] = mapped_column(Integer())
 
     author_id: Mapped[int] = mapped_column(
         ForeignKey(

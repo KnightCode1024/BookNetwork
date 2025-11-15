@@ -1,8 +1,8 @@
-"""add Genre
+"""initial
 
-Revision ID: f0e3a3a11b5d
-Revises: 7bc8e4d5f0c7
-Create Date: 2025-11-15 14:41:51.277399
+Revision ID: 86f5a6545a2b
+Revises: 
+Create Date: 2025-11-15 17:45:51.117939
 
 """
 from typing import Sequence, Union
@@ -12,8 +12,8 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision: str = 'f0e3a3a11b5d'
-down_revision: Union[str, Sequence[str], None] = '7bc8e4d5f0c7'
+revision: str = '86f5a6545a2b'
+down_revision: Union[str, Sequence[str], None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
 
@@ -24,7 +24,7 @@ def upgrade() -> None:
     op.create_table('authors',
     sa.Column('name', sa.String(), nullable=False),
     sa.Column('surname', sa.String(), nullable=False),
-    sa.Column('patranymic', sa.String(), nullable=False),
+    sa.Column('patronymic', sa.String(), nullable=False),
     sa.Column('bio', sa.Text(), nullable=False),
     sa.Column('date_birth', sa.DateTime(), nullable=False),
     sa.Column('date_death', sa.DateTime(), nullable=False),
@@ -40,10 +40,23 @@ def upgrade() -> None:
     sa.Column('updated_at', sa.DateTime(), server_default=sa.text('now()'), nullable=False),
     sa.PrimaryKeyConstraint('id')
     )
+    op.create_table('users',
+    sa.Column('username', sa.String(length=255), nullable=False),
+    sa.Column('email', sa.String(length=255), nullable=False),
+    sa.Column('hashed_password', sa.String(length=255), nullable=False),
+    sa.Column('is_active', sa.Boolean(), nullable=False),
+    sa.Column('role', sa.Enum('USER', 'MODERATOR', 'ADMIN', name='myuserrole'), nullable=False),
+    sa.Column('id', sa.Integer(), autoincrement=True, nullable=False),
+    sa.Column('created_at', sa.DateTime(), server_default=sa.text('now()'), nullable=False),
+    sa.Column('updated_at', sa.DateTime(), server_default=sa.text('now()'), nullable=False),
+    sa.PrimaryKeyConstraint('id')
+    )
+    op.create_index(op.f('ix_users_email'), 'users', ['email'], unique=True)
+    op.create_index(op.f('ix_users_username'), 'users', ['username'], unique=True)
     op.create_table('books',
     sa.Column('title', sa.String(), nullable=False),
     sa.Column('description', sa.Text(), nullable=False),
-    sa.Column('publication_year', sa.DateTime(), nullable=False),
+    sa.Column('publication_year', sa.Integer(), nullable=False),
     sa.Column('author_id', sa.Integer(), nullable=False),
     sa.Column('genre_id', sa.Integer(), nullable=False),
     sa.Column('id', sa.Integer(), autoincrement=True, nullable=False),
@@ -78,6 +91,9 @@ def downgrade() -> None:
     op.drop_table('reviews')
     op.drop_index(op.f('ix_books_author_id'), table_name='books')
     op.drop_table('books')
+    op.drop_index(op.f('ix_users_username'), table_name='users')
+    op.drop_index(op.f('ix_users_email'), table_name='users')
+    op.drop_table('users')
     op.drop_table('genres')
     op.drop_table('authors')
     # ### end Alembic commands ###

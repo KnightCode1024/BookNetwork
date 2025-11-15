@@ -1,8 +1,6 @@
-# Variables
 COMPOSE_DEV=docker compose -f docker-compose.dev.yml
 COMPOSE_PROD=docker compose -f docker-compose.prod.yml
 
-# Development commands
 dev-up:
 	$(COMPOSE_DEV) up --build -d
 
@@ -18,7 +16,6 @@ dev-restart:
 dev-shell:
 	$(COMPOSE_DEV) exec backend bash
 
-# Production commands
 prod-up:
 	$(COMPOSE_PROD) up --build -d
 
@@ -28,11 +25,9 @@ prod-down:
 prod-logs:
 	$(COMPOSE_PROD) logs -f
 
-# Database commands
 db-shell:
 	$(COMPOSE_DEV) exec postgres psql -U $(POSTGRES_USER) -d $(POSTGRES_NAME)
 
-# Migration commands
 migration-create:
 	$(COMPOSE_DEV) exec backend alembic revision --autogenerate -m "$(name)"
 
@@ -48,19 +43,16 @@ migration-history:
 migration-current:
 	$(COMPOSE_DEV) exec backend alembic current
 
-# Quick migration (create and apply)
 migration:
 	$(COMPOSE_DEV) exec backend alembic revision --autogenerate -m "$(name)"
 	$(COMPOSE_DEV) exec backend alembic upgrade head
 
-# Utility commands
 clean:
 	docker system prune -f
 
 status:
 	$(COMPOSE_DEV) ps
 
-# Help command
 help:
 	@echo "Available commands:"
 	@echo "  dev-up      - Start development environment"

@@ -47,6 +47,7 @@ class AppConfig(BaseSettings):
     HOST: str
     PORT: int
     DEBUG: bool
+    SECRET_KEY: str
 
     model_config = SettingsConfigDict(
         env_prefix="APP_",
