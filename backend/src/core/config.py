@@ -1,10 +1,7 @@
 from pathlib import Path
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
-# BASE_DIR указывает на backend/
 BASE_DIR = Path(__file__).parent.parent.parent
-# ENV_PATH - путь к .env файлу (в корне проекта, на уровень выше backend/)
-# Если .env находится в backend/, используйте: ENV_PATH = BASE_DIR / ".env"
 ENV_PATH = BASE_DIR.parent / ".env"
 
 
@@ -41,16 +38,12 @@ class RedisConfig(BaseSettings):
 
 
 class AuthJWT(BaseSettings):
-    # Сертификаты: в Docker монтируются в /certs, локально в backend/certs/
-    # Проверяем наличие /certs (Docker), иначе используем локальный путь
     _certs_dir = Path("/certs") if Path("/certs").exists() else (BASE_DIR / "certs")
     PRIVATE_KEY: Path = _certs_dir / "jwt-private.pem"
     PUBLIC_KEY: Path = _certs_dir / "jwt-public.pem"
     ALGORITM: str = "RS256"
-    ACCESS_TOKEN_EXPIRE_MINUTES: int = (
-        60 * 24 * 90
-    )  # Для тестов значение установлено на 24 ч
-    REFRESH_TOKEN_EXPIRE_DAYS: int = 180
+    ACCESS_TOKEN_EXPIRE_MINUTES: int  = 15
+    REFRESH_TOKEN_EXPIRE_DAYS: int = 14
 
 
 class AppConfig(BaseSettings):
