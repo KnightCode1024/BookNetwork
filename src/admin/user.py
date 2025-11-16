@@ -11,9 +11,11 @@ class UserAdmin(ModelView, model=User):
         User.email,
         User.role,
         User.is_active,
-        User.created_at,
-        User.updated_at,
+        # User.created_at,
+        # User.updated_at,
     ]
+
+    form_columns = [User.created_at, User.updated_at,]
 
     def is_accessible(self, request: Request) -> bool:
         return request.session.get("role") == "admin"

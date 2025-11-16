@@ -40,6 +40,8 @@ class User(Base):
         default=MyUserRole.USER,
     )
 
+    reviews: Mapped[List["Review"]] = relationship("Review", back_populates="user")
+
     @validates("email")
     def validate_email_format(self, key, email):
         if not email:

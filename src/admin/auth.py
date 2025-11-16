@@ -21,7 +21,7 @@ class AdminAuth(AuthenticationBackend):
             user_service = UserService(session)
             user = await user_service.authenticate_user(username, password)
 
-            if user and user.role == MyUserRole.ADMIN:
+            if user and user.role in [MyUserRole.ADMIN, MyUserRole.MODERATOR]:
                 request.session.update(
                     {
                         "user_id": user.id,

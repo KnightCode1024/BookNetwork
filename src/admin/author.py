@@ -12,9 +12,11 @@ class AuthorAdmin(ModelView, model=Author):
         Author.patronymic,
         Author.date_birth,
         Author.date_death,
-        Author.created_at,
-        Author.updated_at,
+        # Author.created_at,
+        # Author.updated_at,
     ]
+
+    form_columns = [Author.created_at, Author.updated_at]
 
     def is_accessible(self, request: Request) -> bool:
         return request.session.get("role") in ["admin", "moderator"]

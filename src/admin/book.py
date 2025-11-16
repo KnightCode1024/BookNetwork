@@ -9,11 +9,41 @@ class BookAdmin(ModelView, model=Book):
         Book.id,
         Book.title,
         Book.publication_year,
-        Book.author_id,
-        Book.genre_id,
+        Book.author,
+        Book.genre,
         Book.created_at,
         Book.updated_at,
     ]
+    
+    column_details_list = [
+        Book.id,
+        Book.title,
+        Book.description,
+        Book.publication_year,
+        Book.author,
+        Book.genre,
+        Book.created_at,
+        Book.updated_at,
+    ]
+
+    form_columns = [
+        Book.title,
+        Book.description,
+        Book.publication_year,
+        Book.author,
+        Book.genre,
+    ]
+
+    form_ajax_refs = {
+        'author': {
+            'fields': ('name', 'surname'),
+            'order_by': ('surname', 'name'),
+        },
+        'genre': {
+            'fields': ('name',),
+            'order_by': ('name',),
+        }
+    }
 
     def is_accessible(self, request: Request) -> bool:
         return request.session.get("role") in ["admin", "moderator"]

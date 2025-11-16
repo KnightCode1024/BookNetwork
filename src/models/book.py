@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy import String, Text, ForeignKey, DateTime, Integer
 
 from models import Base
@@ -24,3 +24,6 @@ class Book(Base):
             ondelete="CASCADE",
         )
     )
+
+    author: Mapped["Author"] = relationship("Author", back_populates="books")
+    genre: Mapped["Genre"] = relationship("Genre", back_populates="books")

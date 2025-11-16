@@ -1,6 +1,6 @@
 from enum import IntEnum
 
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy import String, ForeignKey
 
 from models import Base
@@ -33,3 +33,5 @@ class Review(Base):
         index=True,
     )
     book_id: Mapped[int] = mapped_column(ForeignKey("books.id", ondelete="CASCADE"))
+    user: Mapped["User"] = relationship("User", back_populates="reviews")
+    book: Mapped["Book"] = relationship("Book")
