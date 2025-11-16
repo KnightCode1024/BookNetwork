@@ -19,7 +19,7 @@ export const HomePage = () => {
   return (
     <Container size="md" py="xl">
       <Stack gap="md">
-        <Title order={1}>Добро пожаловать в BookNetwork!</Title>
+        <Title order={1}>Добро пожаловать в Переплёт!</Title>
         
         {!isAuthenticated && (
           <Paper p="md" withBorder>

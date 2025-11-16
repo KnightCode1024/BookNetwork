@@ -44,8 +44,7 @@ migration-current:
 	$(COMPOSE_DEV) exec backend alembic current
 
 migration:
-	$(COMPOSE_DEV) exec backend alembic revision --autogenerate -m "$(name)"
-	$(COMPOSE_DEV) exec backend alembic upgrade head
+	$(COMPOSE_DEV) exec backend sh -c "alembic revision --autogenerate -m '$(name)' && alembic upgrade head"
 
 clean:
 	docker system prune -f

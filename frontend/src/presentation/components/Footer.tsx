@@ -7,7 +7,7 @@ export const Footer = () => {
     <Container size="xl" py="md" style={{ borderTop: '1px solid var(--mantine-color-gray-3)' }}>
       <Group justify="space-between" align="center">
         <Text size="sm" c="dimmed">
-          © {currentYear} BookNetwork. Все права защищены.
+          © {currentYear} Переплёт. Все права защищены.
         </Text>
         <Group gap="md">
           <Anchor href="#" size="sm" c="dimmed">

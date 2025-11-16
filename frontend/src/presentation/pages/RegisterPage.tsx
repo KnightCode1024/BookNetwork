@@ -105,7 +105,7 @@ export const RegisterPage = () => {
 
             <TextInput
               label="Email"
-              placeholder="Введите email (необязательно)"
+              placeholder="Введите email"
               type="email"
               {...form.getInputProps('email')}
             />

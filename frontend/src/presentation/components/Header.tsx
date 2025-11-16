@@ -38,7 +38,7 @@ export const Header = () => {
             c="blue"
             style={{ textDecoration: 'none' }}
           >
-            BookNetwork
+            Переплёт
           </Text>
 
           {/* Desktop Navigation */}
