@@ -45,6 +45,9 @@ export const Header = () => {
           <Group visibleFrom="sm" gap="xs">
             {isAuthenticated ? (
               <>
+                <Button variant="light" component={Link} to="/authors">
+                  Авторы
+                </Button>
                 <Menu shadow="md" width={200}>
                   <Menu.Target>
                     <Button variant="subtle" leftSection={<Avatar size="sm" radius="xl" />}>
@@ -87,6 +90,9 @@ export const Header = () => {
         <Stack gap="md">
           {isAuthenticated ? (
             <>
+              <Button variant="default" fullWidth component={Link} to="/authors" onClick={close}>
+                Авторы
+              </Button>
               <Text fw={500}>Привет, {user?.username || 'Пользователь'}!</Text>
               {user?.email && <Text size="sm" c="dimmed">{user.email}</Text>}
               <Button variant="default" fullWidth component={Link} to="/profile" onClick={close}>

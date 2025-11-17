@@ -12,6 +12,7 @@ import { LoginPage } from './presentation/pages/LoginPage';
 import { RegisterPage } from './presentation/pages/RegisterPage';
 import { HomePage } from './presentation/pages/HomePage';
 import { ProfilePage } from './presentation/pages/ProfilePage';
+import { AuthorsPage } from './presentation/pages/AuthorsPage';
 
 const theme = createTheme({});
 
@@ -56,6 +57,14 @@ function App() {
                   element={
                     <ProtectedRoute>
                       <ProfilePage />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/authors"
+                  element={
+                    <ProtectedRoute>
+                      <AuthorsPage />
                     </ProtectedRoute>
                   }
                 />

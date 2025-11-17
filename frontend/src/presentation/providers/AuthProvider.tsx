@@ -25,6 +25,7 @@ interface AuthContextValue {
   logoutUseCase: LogoutUseCase;
   getCurrentUserUseCase: GetCurrentUserUseCase;
   tokenStorage: LocalStorageTokenStorage;
+  apiClient: ApiClient;
 }
 
 export const AuthContext = createContext<AuthContextValue | null>(null);
@@ -94,6 +95,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     logoutUseCase: logoutUseCaseWithNavigation,
     getCurrentUserUseCase,
     tokenStorage,
+    apiClient,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
