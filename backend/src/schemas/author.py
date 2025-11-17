@@ -9,8 +9,8 @@ class AuthorBase(BaseModel):
     surname: str
     patronymic: str
     bio: str
-    date_birth: datetime
-    date_death: datetime
+    date_birth: datetime = None
+    date_death: datetime = None
 
 
 class AuthorCreate(AuthorBase):
