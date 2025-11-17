@@ -40,13 +40,21 @@ class AuthorService:
 
     def _validate_dates(self, author_data: dict):
         if 'date_birth' in author_data and author_data['date_birth']:
-            if not isinstance(author_data['date_birth'], datetime):
-                raise ValueError("date_birth must be a datetime object")
+            if isinstance(author_data['date_birth'], str):
+                try:
+                    author_data['date_birth'] = datetime.fromisoformat(author_data['date_birth'].replace('Z', '+00:00'))
+                except ValueError:
+                    raise ValueError("Invalid date_birth format")
         
         if 'date_death' in author_data and author_data['date_death']:
-            if not isinstance(author_data['date_death'], datetime):
-                raise ValueError("date_death must be a datetime object")
+            if isinstance(author_data['date_death'], str):
+                try:
+                    author_data['date_death'] = datetime.fromisoformat(author_data['date_death'].replace('Z', '+00:00'))
+                except ValueError:
+                    raise ValueError("Invalid date_death format")
 
-            if 'date_birth' in author_data and author_data['date_birth']:
-                if author_data['date_death'] < author_data['date_birth']:
-                    raise ValueError("Date of death cannot be earlier than date of birth")
+        date_birth = author_data.get('date_birth')
+        date_death = author_data.get('date_death')
+        
+        if date_birth and date_death and date_death < date_birth:
+            raise ValueError("Date of death cannot be earlier than date of birth")

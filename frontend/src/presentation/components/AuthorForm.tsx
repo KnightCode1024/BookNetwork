@@ -51,7 +51,7 @@ export const AuthorForm = ({ initialValues, submitLabel, loading, onSubmit, onCa
         if (!value) {
           return 'Дата смерти обязательна';
         }
-        if (values.date_birth && value < values.date_birth) {
+        if (value && values.date_birth && value < values.date_birth) {
           return 'Дата смерти не может быть раньше даты рождения';
         }
         return null;
@@ -70,7 +70,7 @@ export const AuthorForm = ({ initialValues, submitLabel, loading, onSubmit, onCa
     } else {
       form.setValues(defaultValues);
     }
-  }, [initialValues, form]);
+  }, [initialValues]);
 
   return (
     <form onSubmit={form.onSubmit(onSubmit)}>

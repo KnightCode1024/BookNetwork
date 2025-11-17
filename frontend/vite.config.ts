@@ -15,20 +15,33 @@ export default defineConfig({
     },
   },
   server: {
-    port: 3000,
-    host: true, // Позволяет доступ извне контейнера
-    // Proxy для dev-режима - проксируем все запросы к API
+    port: 3000, // ← Frontend порт
+    host: true,
+    strictPort: true,
+    // Явно настраиваем HMR для WebSocket
+    hmr: {
+      clientPort: 3000, // ← WebSocket тоже на порту 3000
+    },
+    // Расширяем proxy для всех API endpoints
     proxy: {
       '/auth': {
-        target: process.env.VITE_API_BASE_URL || 'http://backend:8000',
+        target: process.env.VITE_API_BASE_URL || 'http://localhost:8000',
         changeOrigin: true,
       },
       '/api': {
-        target: process.env.VITE_API_BASE_URL || 'http://backend:8000',
+        target: process.env.VITE_API_BASE_URL || 'http://localhost:8000',
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, ''),
+      },
+      // ← ДОБАВЬТЕ прокси для authors!
+      '/authors': {
+        target: process.env.VITE_API_BASE_URL || 'http://localhost:8000',
+        changeOrigin: true,
+      },
+      '/authors/search': {
+        target: process.env.VITE_API_BASE_URL || 'http://localhost:8000',
+        changeOrigin: true,
       },
     },
   },
 });
-

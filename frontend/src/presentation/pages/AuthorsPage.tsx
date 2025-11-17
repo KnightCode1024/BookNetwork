@@ -113,38 +113,49 @@ export const AuthorsPage = () => {
   };
 
   const handleFormSubmit = async (values: AuthorFormValues) => {
-    const payload = mapFormToPayload(values);
-    setFormSubmitting(true);
-
+    // Функция для конвертации DD.MM.YYYY в ISO строку
+  const convertDateToISO = (dateString: string): string => {
+    if (!dateString) return '';
+    
     try {
-      if (formMode === 'edit' && selectedAuthor) {
-        await updateAuthorUseCase.execute(selectedAuthor.id, payload);
-        notifications.show({
-          color: 'green',
-          title: 'Автор обновлён',
-          message: `${selectedAuthor.name} ${selectedAuthor.surname} обновлён.`,
-        });
-      } else {
-        await createAuthorUseCase.execute(payload);
-        notifications.show({
-          color: 'green',
-          title: 'Автор создан',
-          message: 'Новый автор успешно добавлен.',
-        });
+      // Если дата уже в формате YYYY-MM-DD (из date input)
+      if (dateString.includes('-')) {
+        const date = new Date(dateString);
+        return date.toISOString();
       }
-      resetForm();
-      fetchAuthors({ query: activeQuery });
+      
+      // Конвертация из DD.MM.YYYY
+      if (dateString.includes('.')) {
+        const parts = dateString.split('.');
+        if (parts.length === 3) {
+          const [day, month, year] = parts.map(part => part.trim());
+          // Создаем дату в формате YYYY-MM-DD
+          const isoDateString = `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}T00:00:00`;
+          const date = new Date(isoDateString);
+          
+          if (isNaN(date.getTime())) {
+            console.error('Invalid date:', dateString);
+            return '';
+          }
+          
+          return date.toISOString();
+        }
+      }
+      
+      return '';
     } catch (error) {
-      console.error(error);
-      notifications.show({
-        color: 'red',
-        title: 'Ошибка при сохранении',
-        message: 'Проверьте корректность данных и попробуйте ещё раз.',
-      });
-    } finally {
-      setFormSubmitting(false);
+      console.error('Date conversion error:', error);
+      return '';
     }
   };
+
+  return {
+    ...values,
+    date_birth: convertDateToISO(values.date_birth),
+    date_death: convertDateToISO(values.date_death),
+  };
+};
+
 
   const handleEditClick = async (authorId: number) => {
     setFetchingAuthor(true);
@@ -207,7 +218,7 @@ export const AuthorsPage = () => {
   };
 
   const handleLoadMore = () => {
-    fetchAuthors({ append: true, offset: skip + AUTHORS_LIMIT });
+  fetchAuthors({ append: true });
   };
 
   const formInitialValues =
