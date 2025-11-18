@@ -14,7 +14,7 @@ class BookAdmin(ModelView, model=Book):
         Book.created_at,
         Book.updated_at,
     ]
-    
+
     column_details_list = [
         Book.id,
         Book.title,
@@ -35,14 +35,14 @@ class BookAdmin(ModelView, model=Book):
     ]
 
     form_ajax_refs = {
-        'author': {
-            'fields': ('name', 'surname'),
-            'order_by': ('surname', 'name'),
+        "author": {
+            "fields": ("name", "surname"),
+            "order_by": ("surname", "name"),
         },
-        'genre': {
-            'fields': ('name',),
-            'order_by': ('name',),
-        }
+        "genre": {
+            "fields": ("name",),
+            "order_by": ("name",),
+        },
     }
 
     def is_accessible(self, request: Request) -> bool:

@@ -5,7 +5,6 @@ from models import Review
 
 
 class ReviewAdmin(ModelView, model=Review):
-    
 
     column_list = [
         Review.id,
@@ -17,7 +16,10 @@ class ReviewAdmin(ModelView, model=Review):
         # Review.updated_at,
     ]
 
-    form_columns = [Review.created_at, Review.updated_at,]
+    form_columns = [
+        Review.created_at,
+        Review.updated_at,
+    ]
 
     def is_accessible(self, request: Request) -> bool:
         return request.session.get("role") in ["admin", "moderator"]

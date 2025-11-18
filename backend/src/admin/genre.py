@@ -13,7 +13,7 @@ class GenreAdmin(ModelView, model=Genre):
     ]
 
     form_columns = [Genre.created_at, Genre.updated_at]
-    
+
     def is_accessible(self, request: Request) -> bool:
         return request.session.get("role") in ["admin", "moderator"]
 

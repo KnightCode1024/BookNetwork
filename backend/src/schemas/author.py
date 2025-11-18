@@ -36,5 +36,5 @@ class AuthorSearchResponse(BaseModel):
     name: str
     surname: str
     patronymic: str
-    
+
     model_config = ConfigDict(from_attributes=True)

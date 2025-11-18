@@ -42,8 +42,8 @@ class AuthJWT(BaseSettings):
     PRIVATE_KEY: Path = _certs_dir / "jwt-private.pem"
     PUBLIC_KEY: Path = _certs_dir / "jwt-public.pem"
     ALGORITM: str = "RS256"
-    ACCESS_TOKEN_EXPIRE_MINUTES: int  = 15
-    REFRESH_TOKEN_EXPIRE_DAYS: int = 14
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = 60 * 24  # 15
+    REFRESH_TOKEN_EXPIRE_DAYS: int = 90  # 14
 
 
 class AppConfig(BaseSettings):

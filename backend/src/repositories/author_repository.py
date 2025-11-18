@@ -14,20 +14,20 @@ class AuthorRepository(BaseRepository):
     async def get_by_name(self, name: str, surname: str) -> Optional[Author]:
         result = await self.session.execute(
             select(self.model).where(
-                self.model.name == name,
-                self.model.surname == surname
+                self.model.name == name, self.model.surname == surname
             )
         )
 
         return result.scalar_one_or_none()
 
-    
     async def search_authors(self, search_term: str, limit: int = 20) -> List[Author]:
         result = await self.session.execute(
-            select(self.model).where(
-                (self.model.name.ilike(f"%{search_term}%")) |
-                (self.model.surname.ilike(f"%{search_term}%")) |
-                (self.model.patronymic.ilike(f"%{search_term}%"))
-            ).limit(limit)
+            select(self.model)
+            .where(
+                (self.model.name.ilike(f"%{search_term}%"))
+                | (self.model.surname.ilike(f"%{search_term}%"))
+                | (self.model.patronymic.ilike(f"%{search_term}%"))
+            )
+            .limit(limit)
         )
         return result.scalars.all()
