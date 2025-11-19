@@ -20,3 +20,6 @@ class GenreService:
 
     async def create_genre(self, genre_data: dict) -> Genre:
         return await self.genre_repo.create(genre_data)
+
+    async def delete_genre(self, genre_id: int) -> bool: 
+        return await self.genre_repo.delete(genre_id)

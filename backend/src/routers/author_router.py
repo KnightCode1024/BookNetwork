@@ -94,7 +94,7 @@ async def delete_author(
     success = await author_service.delete_author(author_id)
     if not success:
         raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND, detail="Author not found"
+            status_code=status.HTTP_404_NOT_FOUND, detail="Author not found",
         )
     return {"message": "Author deleted successfully"}
 

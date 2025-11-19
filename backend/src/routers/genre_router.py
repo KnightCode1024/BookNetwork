@@ -21,7 +21,7 @@ async def get_all_genres(
     return await genre_service.get_all_genres(offset, limit)
 
 
-@router.get("/{genre_id}")
+@router.get("/{genre_id}/")
 async def get_genre_by_id(
     genre_id: int,
     current_user: User = Depends(get_current_user),
@@ -47,3 +47,20 @@ async def add_genre(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail="Failed to create genre",
         )
+
+
+@router.delete("/{genre_id}/")
+async def delete_genre(
+    genre_id: int,
+    current_user: User = Depends(get_current_user),
+    session: AsyncSession = Depends(get_db_session)
+):
+    genre_service = GenreService(session)
+    success = await genre_service.delete_genre(genre_id)
+    if not success:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Genre not found",
+        )
+    return {"message": "Genre deleted successfully"}
+
