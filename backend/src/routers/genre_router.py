@@ -4,7 +4,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from services.genre_service import GenreService
 from dependencies.db import get_db_session
 from dependencies.auth import get_current_user
-from schemas.genre import CreateGenre, GenreResponse
+from schemas.genre import CreateGenre, GenreResponse, GenreUpdate
 from models import User
 
 router = APIRouter(prefix="/genres", tags=["Genres"])
@@ -64,3 +64,24 @@ async def delete_genre(
         )
     return {"message": "Genre deleted successfully"}
 
+
+@router.patch("/{genre_id}")
+async def update_genre(
+    author_id: int,
+    genre_data: GenreUpdate,
+    current_user: User = Depends(get_current_user),
+    session: AsyncSession = Depends(get_db_session),
+):
+    genre_service = GenreService(session)
+
+    try:
+        genre = await genre_service.partial_update_genre(
+            genre_id, genre_data.dict(exclude_unset=True),
+        )
+
+        if not genre:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND, detail="Genre not found",)
+        return genre
+    except ValueError as e:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(e))
