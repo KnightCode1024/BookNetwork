@@ -10,7 +10,7 @@ class BookService:
     def __init__(self, session: AsyncSession):
         self.book_repo = BookRepository(session)
 
-    async def get_books(self,offset: int = 0, limit: int = 20):
+    async def get_books(self, offset: int = 0, limit: int = 20):
         return await self.book_repo.get_books_by_id_with_author_and_genre(offset, limit)
 
     async def get_book_by_id(self, book_id: int):

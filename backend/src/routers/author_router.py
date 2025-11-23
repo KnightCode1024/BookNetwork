@@ -6,7 +6,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from dependencies.auth import get_current_user
 from dependencies.db import get_db_session
 from models import User
-from schemas.author import AuthorCreate, AuthorUpdate, AuthorResponse
+from schemas.author_schemas import AuthorCreate, AuthorUpdate, AuthorResponse
 from services import AuthorService
 
 router = APIRouter(prefix="/authors", tags=["Authors"])
@@ -94,7 +94,8 @@ async def delete_author(
     success = await author_service.delete_author(author_id)
     if not success:
         raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND, detail="Author not found",
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Author not found",
         )
     return {"message": "Author deleted successfully"}
 

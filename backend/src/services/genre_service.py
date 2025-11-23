@@ -21,10 +21,12 @@ class GenreService:
     async def create_genre(self, genre_data: dict) -> Genre:
         return await self.genre_repo.create(genre_data)
 
-    async def delete_genre(self, genre_id: int) -> bool: 
+    async def delete_genre(self, genre_id: int) -> bool:
         return await self.genre_repo.delete(genre_id)
 
-    async def partial_update_genre(self, genre_id: int, genre_data: dict) -> Optional[Genre]:
+    async def partial_update_genre(
+        self, genre_id: int, genre_data: dict
+    ) -> Optional[Genre]:
         update_data = {k: v for k, v in genre_data.items() if v is not None}
         self._validate_dates(update_data)
         return await self.genre_repo.update(genre_id, update_data)

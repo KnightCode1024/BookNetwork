@@ -131,4 +131,4 @@ def downgrade() -> None:
     op.drop_table("genres")
     op.drop_table("authors")
     # ### end Alembic commands ###
-    op.execute('DROP TYPE IF EXISTS myuserrole')    
+    op.execute("DROP TYPE IF EXISTS myuserrole")

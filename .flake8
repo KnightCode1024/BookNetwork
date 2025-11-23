@@ -1,0 +1,29 @@
+[flake8]
+per-file-ignores =
+    */__init__.py: F401
+    */alembic/versions/*: *
+    */alembic/env.py: E402
+
+# Игнорируемые ошибки:
+# F401 - unused imports (обрабатываются через per-file-ignores для __init__.py)
+# E501 - line too long (лучше использовать black для форматирования)
+# F841 - assigned but never used
+ignore = 
+    F401,
+    E501,
+    F841
+
+exclude = 
+    .git,
+    __pycache__,
+    .venv,
+    venv,
+    env,
+    .env,
+    .mypy_cache,
+    .pytest_cache,
+    build,
+    dist,
+    alembic/versions
+
+max-line-length = 88

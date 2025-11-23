@@ -9,21 +9,18 @@ class BookAdmin(ModelView, model=Book):
         Book.id,
         Book.title,
         Book.author,  # Показывает связанного автора
-        Book.genre,   # Показывает связанный жанр
+        Book.genre,  # Показывает связанный жанр
         Book.publication_year,
     ]
 
-    column_labels = {
-        Book.author: "Автор",
-        Book.genre: "Жанр"
-    }
+    column_labels = {Book.author: "Автор", Book.genre: "Жанр"}
 
     form_columns = [
         Book.title,
         Book.description,
         Book.publication_year,
         Book.author,  # Теперь используем связь, а не ID
-        Book.genre,   # Теперь используем связь, а не ID
+        Book.genre,  # Теперь используем связь, а не ID
     ]
 
     def is_accessible(self, request: Request) -> bool:

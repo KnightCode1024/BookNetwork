@@ -13,10 +13,10 @@ class BookRepository(BaseRepository):
         super().__init__(Book, session)
 
     async def get_books_by_id_with_author_and_genre(
-        self, 
+        self,
         offset: int = 0,
         limit: int = 20,
-         ):
+    ):
         query = (
             select(self.model)
             .offset(offset)
@@ -26,7 +26,6 @@ class BookRepository(BaseRepository):
         )
         result = await self.session.execute(query)
         return result.unique().scalars().all()
-        
 
     async def get_book_by_id(self, book_id: int):
         query = (
@@ -37,4 +36,3 @@ class BookRepository(BaseRepository):
         )
         result = await self.session.execute(query)
         return result.unique.scalar_one_or_none()
-
