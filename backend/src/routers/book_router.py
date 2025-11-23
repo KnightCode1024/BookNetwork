@@ -31,7 +31,6 @@ async def get_book(
     return await book_service.get_book(book_id)
 
 
-
 @router.post("/", response_model=BookResponse)
 async def create_book(
     book_data: BookCreate,
