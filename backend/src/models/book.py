@@ -27,3 +27,6 @@ class Book(Base):
 
     author: Mapped["Author"] = relationship("Author", back_populates="books")
     genre: Mapped["Genre"] = relationship("Genre", back_populates="books")
+
+    def __str__(self):
+        return self.title

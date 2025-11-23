@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, Query, status, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from services.genre_service import GenreService
+from services import GenreService
 from dependencies.db import get_db_session
 from dependencies.auth import get_current_user
 from schemas.genre import CreateGenre, GenreResponse, GenreUpdate

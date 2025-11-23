@@ -10,3 +10,6 @@ class Genre(Base):
     name: Mapped[str] = mapped_column(String())
 
     books: Mapped[List["Book"]] = relationship("Book", back_populates="genre")
+
+    def __str__(self):
+        return self.name

@@ -7,7 +7,7 @@ from dependencies.auth import get_current_user
 from dependencies.db import get_db_session
 from models import User
 from schemas.author import AuthorCreate, AuthorUpdate, AuthorResponse
-from services.author_service import AuthorService
+from services import AuthorService
 
 router = APIRouter(prefix="/authors", tags=["Authors"])
 
@@ -29,13 +29,13 @@ async def get_author_by_id(
 
 @router.get("/", response_model=List[AuthorResponse])
 async def get_all_authors(
-    skip: int = Query(0, ge=0, description="Offset"),
+    offset: int = Query(0, ge=0, description="Offset"),
     limit: int = Query(20, ge=1, le=100, description="Limit"),
     current_user: User = Depends(get_current_user),
     session: AsyncSession = Depends(get_db_session),
 ):
     author_service = AuthorService(session)
-    return await author_service.get_all_authors(skip, limit)
+    return await author_service.get_all_authors(offset, limit)
 
 
 @router.get("/search/", response_model=List[AuthorResponse])

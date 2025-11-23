@@ -5,7 +5,12 @@ from fastapi.middleware.cors import CORSMiddleware
 from starlette.middleware.sessions import SessionMiddleware
 
 from core.config import config
-from routers import auth_router, author_router, genre_router
+from routers import (
+    auth_router, 
+    author_router, 
+    genre_router,
+    book_router
+)
 from core.database import engine
 from admin import (
     UserAdmin,
@@ -42,6 +47,7 @@ routers = [
     auth_router,
     author_router,
     genre_router,
+    book_router,
 ]
 
 admin_tables = [

@@ -35,10 +35,13 @@ class BaseRepository(IRepository):
         )
         return result.scalar_one_or_none()
 
-    async def get_all(self, offset: int = 0, limit: int = 20):
-        result = await self.session.execute(
-            select(self.model).offset(offset).limit(limit)
-        )
+    async def get_all(self, offset: int = 0, limit: int = 20, **kwargs):
+        query = select(self.model).offset(offset).limit(limit)   
+
+        if "options" in kwargs:
+            query = query.options[*kwargs["options"]] 
+
+        result = await self.session.execute(query)
         return result.scalars().all()
 
     async def create(self, data: dict):
