@@ -25,7 +25,7 @@ class BookRepository(BaseRepository):
             .options(selectinload(self.model.genre))
         )
         result = await self.session.execute(query)
-        return result.unique().scalars().all()
+        return result.scalars().all()
 
     async def get_book_by_id(self, book_id: int):
         query = (
@@ -35,4 +35,16 @@ class BookRepository(BaseRepository):
             .options(selectinload(self.model.genre))
         )
         result = await self.session.execute(query)
-        return result.unique.scalar_one_or_none()
+        return result.scalar_one_or_none()
+
+    async def update_book(self, id: int, data: dict):
+        instance = await self.get_by_id(id)
+        if not instance:
+            return None
+        
+        for key, value in data.items():
+            if value is not None and hasattr(instance, key):
+                setattr(instance, key, value)
+        
+        await self.session.commit()
+        return await self.get_book_by_id(id)

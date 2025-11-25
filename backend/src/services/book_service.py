@@ -19,8 +19,11 @@ class BookService:
     async def create_book(self, book_data: dict) -> Book:
         return await self.book_repo.create(book_data)
 
-    async def update_book(self, book_id: int, book_data: dict) -> Optional[Book]:
-        return await self.book_repo.update(book_id, book_data)
-
     async def delete_book(self, book_id: int) -> bool:
         return await self.book_repo.delete(book_id)
+
+    async def update_book(self, book_id: int, book_data: dict) -> Optional[Book]:
+        return await self.book_repo.update_book(book_id, book_data)
+
+    async def partial_update_book(self, book_id: int, book_data: dict) -> Optional[Book]:
+        return await self.book_repo.update_book(book_id, book_data)

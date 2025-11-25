@@ -1,5 +1,4 @@
 from typing import Optional, List
-from abc import ABC, abstractmethod
 
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, update, delete
@@ -7,24 +6,7 @@ from sqlalchemy import select, update, delete
 from models import Base
 
 
-class IRepository(ABC):
-    @abstractmethod
-    async def get_by_id(self, id: int) -> Optional[Base]: ...
-
-    @abstractmethod
-    async def get_all(self, offset: int = 0, limit: int = 20) -> List[Base]: ...
-
-    @abstractmethod
-    async def create(self, data: dict) -> Base: ...
-
-    @abstractmethod
-    async def update(self, id: int, data: dict) -> Optional[Base]: ...
-
-    @abstractmethod
-    async def delete(self, id: int) -> bool: ...
-
-
-class BaseRepository(IRepository):
+class BaseRepository:
     def __init__(self, model: Base, session: AsyncSession):
         self.model = model
         self.session = session
@@ -52,19 +34,17 @@ class BaseRepository(IRepository):
         return instance
 
     async def update(self, id: int, data: dict):
-        updated_data = {k: v for k, v in data.items() if v is not None}
+        instance = await self.get_by_id(id)
+        if not instance:
+            return None
 
-        stmt = (
-            update(self.model)
-            .where(self.model.id == id)
-            .values(**updated_data)
-            .execution_options(synchronize_session="fetch")
-        )
-
-        await self.session.execute(stmt)
+        for key, value in data.items():
+            if value is not None and hasattr(instance, key):
+                setattr(instance, key, value)
+        
         await self.session.commit()
-
-        return await self.get_by_id(id)
+        await self.session.refresh(instance)
+        return instance
 
     async def delete(self, id: int):
         instance = await self.get_by_id(id)
