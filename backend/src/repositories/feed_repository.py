@@ -119,11 +119,11 @@ class FeedRepository:
             .order_by(desc(Review.created_at))
             .limit(limit)
             .options(
-                selectinload(Review.user),
-                selectinload(Review.book)
-                .selectinload(Book.author),
-                selectinload(Review.book)
-                .selectinload(Book.genre),
+                joinedload(Review.user),
+                joinedload(Review.book)
+                .joinedload(Book.author),
+                joinedload(Review.book)
+                .joinedload(Book.genre),
             )
         )
         
