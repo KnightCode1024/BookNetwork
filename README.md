@@ -50,4 +50,5 @@ make dev-up
 
 ## Полезные ссылки
 
-- [Список задач](docs/TASK.md)
+- [Список задач](docs/TASK.md) 
+- [Бэклог](docs/BACKLOG.md)

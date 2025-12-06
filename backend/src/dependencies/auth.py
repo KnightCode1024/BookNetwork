@@ -21,39 +21,3 @@ async def get_current_user(
             detail="Invalid or expired token",
         )
     return user
-
-
-async def get_token_from_header(authorization: Optional[str] = Header(None)) -> str:
-    if not authorization:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Authorization header missing",
-        )
-
-    try:
-        scheme, token = authorization.split()
-        if scheme.lower() != "bearer":
-            raise HTTPException(
-                status_code=status.HTTP_401_UNAUTHORIZED,
-                detail="Invalid authentication scheme",
-            )
-        return token
-    except ValueError:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Invalid authorization header format",
-        )
-
-
-async def get_current_user_manual(
-    token: str = Depends(get_token_from_header),
-    session: AsyncSession = Depends(get_db_session),
-):
-    user_service = UserService(session)
-    user = await user_service.verify_token(token)
-    if not user:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Invalid or expired token",
-        )
-    return user

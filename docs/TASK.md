@@ -2,7 +2,7 @@
 
 ## Backend
 
-- [ ] Добавить CRUD для Book
+- [x] Добавить CRUD для Book
 - [ ] Добавить таблицы Comment, Like
 - [ ] Добавить Review (связь с Book, Genre, Comment, Like)
 - [ ] Добавить подписки на читателей
