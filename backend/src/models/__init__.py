@@ -4,3 +4,4 @@ from models.author import Author
 from models.book import Book
 from models.review import Review, ReviewStars
 from models.genre import Genre
+from models.like import Like

@@ -5,3 +5,4 @@ from repositories.genre_repository import GenreRepository
 from repositories.book_repository import BookRepository
 from repositories.feed_repository import FeedRepository
 from repositories.review_repository import ReviewRepository
+from repositories.like_repository import LikeRepository

@@ -1,3 +1,4 @@
+from typing import List
 from enum import IntEnum
 
 from sqlalchemy.orm import Mapped, mapped_column, relationship
@@ -25,6 +26,14 @@ class Review(Base):
     )
     stars: Mapped[ReviewStars] = mapped_column(nullable=False)
 
+    book_id: Mapped[int] = mapped_column(
+        ForeignKey(
+            "books.id",
+            ondelete="CASCADE",
+        )
+    )
+    book: Mapped["Book"] = relationship("Book")
+
     user_id: Mapped[int] = mapped_column(
         ForeignKey(
             "users.id",
@@ -32,6 +41,13 @@ class Review(Base):
         ),
         index=True,
     )
-    book_id: Mapped[int] = mapped_column(ForeignKey("books.id", ondelete="CASCADE"))
-    user: Mapped["User"] = relationship("User", back_populates="reviews")
-    book: Mapped["Book"] = relationship("Book")
+    user: Mapped["User"] = relationship(
+        "User",
+        back_populates="reviews",
+    )
+
+    likes: Mapped[List["Like"]] = relationship(
+        "Like",
+        back_populates="review",
+        cascade="all, delete-orphan",
+    )

@@ -10,36 +10,35 @@ class FeedService:
         self.feed_repo = FeedRepository(session)
 
     async def get_feed(
-        self,
-        offset: int = 0,
-        limit: int = 20,
-        filters: Optional[Dict[str, Any]] = None
+        self, offset: int = 0, limit: int = 20, filters: Optional[Dict[str, Any]] = None
     ) -> FeedResponse:
-        
+
         feed_data = await self.feed_repo.get_feed_with_stats(offset, limit, filters)
 
-        review_responses = [
-            ReviewFeedResponse.from_orm(review)
-            for review in feed_data["reviews"]
-        ]
-        
+        review_responses = []
+        for review in feed_data["reviews"]:
+            review_response = ReviewFeedResponse.from_orm(review)
+            review_response.likes_count = review.likes_count
+            review_responses.append(review_response)
+
         return FeedResponse(
             reviews=review_responses,
             total=feed_data["total"],
             offset=feed_data["offset"],
             limit=feed_data["limit"],
-            has_more=feed_data["has_more"]
+            has_more=feed_data["has_more"],
         )
 
     async def get_recent_activity(
-        self,
-        days: int = 7,
-        limit: int = 10
+        self, days: int = 7, limit: int = 10
     ) -> List[ReviewFeedResponse]:
-        
+
         reviews = await self.feed_repo.get_recent_activity(days, limit)
-        
-        return [
-            ReviewFeedResponse.from_orm(review)
-            for review in reviews
-        ]
+
+        review_responses = []
+        for review in reviews:
+            review_response = ReviewFeedResponse.from_orm(review)
+            review_response.likes_count = review.likes_count
+            review_responses.append(review_response)
+
+        return review_responses

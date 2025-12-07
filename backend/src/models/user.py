@@ -40,7 +40,15 @@ class User(Base):
         default=MyUserRole.USER,
     )
 
-    reviews: Mapped[List["Review"]] = relationship("Review", back_populates="user")
+    reviews: Mapped[List["Review"]] = relationship(
+        "Review",
+        back_populates="user",
+    )
+    likes: Mapped[List["Like"]] = relationship(
+        "Like",
+        back_populates="user",
+        cascade="all, delete-orphan",
+    )
 
     @validates("email")
     def validate_email_format(self, key, email):
@@ -52,3 +60,6 @@ class User(Base):
             return valid.email.lower()
         except EmailNotValidError as e:
             raise ValueError(f"Invalid email format: {str(e)}")
+
+    def __str__(self):
+        return self.username

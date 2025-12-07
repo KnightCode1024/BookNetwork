@@ -10,11 +10,11 @@ class AuthorFeedResponse(BaseModel):
     name: str
     surname: str
     patronymic: str
-    
+
     @property
     def display_name(self):
         return f"{self.name[0].upper()}.{self.patronymic[0].upper()}.{self.surname.capitalize()}"
-    
+
     class Config:
         from_attributes = True
 
@@ -22,7 +22,7 @@ class AuthorFeedResponse(BaseModel):
 class GenreFeedResponse(BaseModel):
     id: int
     name: str
-    
+
     class Config:
         from_attributes = True
 
@@ -34,7 +34,7 @@ class BookFeedResponse(BaseModel):
     publication_year: int
     author: AuthorFeedResponse
     genre: GenreFeedResponse
-    
+
     class Config:
         from_attributes = True
 
@@ -42,7 +42,7 @@ class BookFeedResponse(BaseModel):
 class UserFeedResponse(BaseModel):
     id: int
     username: str
-    
+
     class Config:
         from_attributes = True
 
@@ -52,12 +52,13 @@ class ReviewFeedResponse(BaseModel):
     title: str
     content: str
     stars: ReviewStars
+    likes_count: int
     created_at: datetime
     updated_at: datetime
-    
+
     user: UserFeedResponse
     book: BookFeedResponse
-    
+
     class Config:
         from_attributes = True
 
@@ -68,7 +69,7 @@ class FeedResponse(BaseModel):
     offset: int
     limit: int
     has_more: bool
-    
+
     class Config:
         from_attributes = True
 
