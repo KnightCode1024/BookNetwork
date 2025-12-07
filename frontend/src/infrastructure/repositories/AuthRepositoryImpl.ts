@@ -15,16 +15,21 @@ export class AuthRepositoryImpl implements AuthRepository {
   }
 
   async register(data: RegisterData): Promise<TokenPair> {
-    // Убираем undefined поля, чтобы не отправлять их на бэкенд
+    // Формируем payload для регистрации
     const payload: Record<string, unknown> = {
       username: data.username,
       password: data.password,
     };
     
-    // Добавляем email только если он есть
+    // Добавляем email только если он есть и не пустой
+    // Если email не передан или пустой, не добавляем его в payload
+    // Бэкенд ожидает либо валидный EmailStr, либо None (но не undefined)
     if (data.email && data.email.trim()) {
       payload.email = data.email.trim();
     }
+    // Если email не передан, не добавляем поле вообще
+    
+    console.log('Register payload:', payload);
     
     const response = await this.apiClient.getClient().post<TokenPair>(
       '/auth/register/',

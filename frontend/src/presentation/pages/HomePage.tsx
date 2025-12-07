@@ -1,11 +1,17 @@
+import { Navigate } from 'react-router-dom';
 import { Container, Title, Stack, Text, Paper, Button, Group } from '@mantine/core';
 import { useAuthStore } from '@application/store/authStore';
 import { useAuth } from '../providers/AuthProvider';
 import { Link } from 'react-router-dom';
 
 export const HomePage = () => {
-  const { user, isAuthenticated } = useAuthStore();
+  const { user, isAuthenticated, isLoading } = useAuthStore();
   const { getCurrentUserUseCase } = useAuth();
+
+  // Редирект авторизованных пользователей на /feed
+  if (!isLoading && isAuthenticated) {
+    return <Navigate to="/feed" replace />;
+  }
 
   const handleRefreshUser = async () => {
     try {

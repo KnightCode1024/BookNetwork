@@ -2,6 +2,9 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import path from 'path';
 
+// В Docker используем backend:8000, локально - localhost:8000
+const apiTarget = process.env.VITE_API_BASE_URL || 'http://localhost:8000';
+
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
@@ -25,21 +28,24 @@ export default defineConfig({
     // Расширяем proxy для всех API endpoints
     proxy: {
       '/auth': {
-        target: process.env.VITE_API_BASE_URL || 'http://localhost:8000',
+        target: apiTarget,
         changeOrigin: true,
       },
       '/api': {
-        target: process.env.VITE_API_BASE_URL || 'http://localhost:8000',
+        target: apiTarget,
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, ''),
       },
-      // ← ДОБАВЬТЕ прокси для authors!
       '/authors': {
-        target: process.env.VITE_API_BASE_URL || 'http://localhost:8000',
+        target: apiTarget,
         changeOrigin: true,
       },
       '/authors/search': {
-        target: process.env.VITE_API_BASE_URL || 'http://localhost:8000',
+        target: apiTarget,
+        changeOrigin: true,
+      },
+      '/feed': {
+        target: apiTarget,
         changeOrigin: true,
       },
     },

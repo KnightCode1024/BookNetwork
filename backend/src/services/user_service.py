@@ -101,20 +101,27 @@ class UserService:
             return None
 
     async def create_user(self, user_data: dict) -> User:
+        # Валидируем email, если он передан
         if user_data.get("email"):
             user_data["email"] = self._validate_email(user_data["email"])
 
+        # Проверяем существование username
         existing_user = await self.user_repo.get_by_username(user_data["username"])
         if existing_user:
             raise ValueError("Username already exists")
 
+        # Проверяем существование email, если он передан
         if user_data.get("email"):
             existing_email = await self.user_repo.get_by_email(user_data["email"])
             if existing_email:
                 raise ValueError("Email already exists")
 
+        # Хешируем пароль
         user_data["hashed_password"] = hash_password(user_data["password"])
         del user_data["password"]
+
+        # Убираем is_active, если он передан - устанавливается автоматически
+        user_data.pop("is_active", None)
 
         return await self.user_repo.create(user_data)
 

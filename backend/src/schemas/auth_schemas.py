@@ -10,9 +10,9 @@ class CreateUser(BaseModel):
 
 
 class UserSchema(CreateUser):
-    model_config = ConfigDict(strict=True)
+    model_config = ConfigDict(strict=False)  # Изменено на False, чтобы игнорировать лишние поля
     password: str = Field(..., min_length=6)
-    is_active: bool = True
+    # is_active не должен приходить от клиента, устанавливается автоматически
 
 
 class LoginSchema(BaseModel):

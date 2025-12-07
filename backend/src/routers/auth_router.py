@@ -45,13 +45,17 @@ async def register_user(
     user_service = UserService(session)
 
     try:
-        user = await user_service.create_user(
-            {
-                "username": user_data.username,
-                "email": user_data.email,
-                "password": user_data.password,
-            }
-        )
+        # Формируем данные для создания пользователя
+        create_data = {
+            "username": user_data.username,
+            "password": user_data.password,
+        }
+        
+        # Добавляем email только если он передан
+        if user_data.email is not None:
+            create_data["email"] = user_data.email
+        
+        user = await user_service.create_user(create_data)
 
         tokens = await user_service.login_user(
             username=user_data.username,
@@ -76,6 +80,14 @@ async def register_user(
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail=str(e),
+        )
+    except Exception as e:
+        # Логируем неожиданные ошибки для отладки
+        import logging
+        logging.error(f"Unexpected error during registration: {str(e)}", exc_info=True)
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Internal server error: {str(e)}",
         )
 
 

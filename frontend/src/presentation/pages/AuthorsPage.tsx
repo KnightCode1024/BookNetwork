@@ -113,48 +113,41 @@ export const AuthorsPage = () => {
   };
 
   const handleFormSubmit = async (values: AuthorFormValues) => {
-    // Функция для конвертации DD.MM.YYYY в ISO строку
-  const convertDateToISO = (dateString: string): string => {
-    if (!dateString) return '';
-    
+    setFormSubmitting(true);
     try {
-      // Если дата уже в формате YYYY-MM-DD (из date input)
-      if (dateString.includes('-')) {
-        const date = new Date(dateString);
-        return date.toISOString();
+      const payload = mapFormToPayload(values);
+      
+      if (formMode === 'create') {
+        await createAuthorUseCase.execute(payload);
+        notifications.show({
+          color: 'teal',
+          title: 'Автор создан',
+          message: `${values.name} ${values.surname} успешно добавлен.`,
+        });
+        resetForm();
+      } else if (formMode === 'edit' && selectedAuthor) {
+        await updateAuthorUseCase.execute(selectedAuthor.id, payload);
+        notifications.show({
+          color: 'teal',
+          title: 'Автор обновлён',
+          message: `${values.name} ${values.surname} успешно обновлён.`,
+        });
+        resetForm();
       }
       
-      // Конвертация из DD.MM.YYYY
-      if (dateString.includes('.')) {
-        const parts = dateString.split('.');
-        if (parts.length === 3) {
-          const [day, month, year] = parts.map(part => part.trim());
-          // Создаем дату в формате YYYY-MM-DD
-          const isoDateString = `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}T00:00:00`;
-          const date = new Date(isoDateString);
-          
-          if (isNaN(date.getTime())) {
-            console.error('Invalid date:', dateString);
-            return '';
-          }
-          
-          return date.toISOString();
-        }
-      }
-      
-      return '';
-    } catch (error) {
-      console.error('Date conversion error:', error);
-      return '';
+      fetchAuthors({ query: activeQuery });
+    } catch (error: any) {
+      console.error(error);
+      const errorMessage = error?.response?.data?.detail || error?.message || 'Не удалось сохранить автора. Попробуйте позже.';
+      notifications.show({
+        color: 'red',
+        title: 'Ошибка',
+        message: errorMessage,
+      });
+    } finally {
+      setFormSubmitting(false);
     }
   };
-
-  return {
-    ...values,
-    date_birth: convertDateToISO(values.date_birth),
-    date_death: convertDateToISO(values.date_death),
-  };
-};
 
 
   const handleEditClick = async (authorId: number) => {
@@ -236,11 +229,42 @@ export const AuthorsPage = () => {
   return (
     <Container size="xl" py="xl">
       <Stack gap="xl">
-        <Title order={1}>Управление авторами</Title>
+        <Title
+          order={1}
+          c="#8b4513"
+          style={{
+            fontFamily: '"Times New Roman", "Georgia", "Times", serif',
+            textTransform: 'uppercase',
+            letterSpacing: '3px',
+            textShadow: '2px 2px 4px rgba(0,0,0,0.1)',
+          }}
+        >
+          Управление авторами
+        </Title>
 
-        <Paper withBorder p="lg" shadow="sm">
+        <Paper
+          withBorder
+          p="lg"
+          shadow="sm"
+          style={{
+            borderColor: '#8b4513',
+            borderWidth: '2px',
+            borderStyle: 'double',
+            backgroundColor: '#fef9e7',
+          }}
+        >
           <Stack gap="md">
-            <Title order={3}>Поиск авторов</Title>
+            <Title
+              order={3}
+              c="#8b4513"
+              style={{
+                fontFamily: '"Times New Roman", "Georgia", "Times", serif',
+                textTransform: 'uppercase',
+                letterSpacing: '1px',
+              }}
+            >
+              Поиск авторов
+            </Title>
             <Group align="flex-end">
               <TextInput
                 label="Имя или фамилия"
@@ -262,10 +286,30 @@ export const AuthorsPage = () => {
           </Stack>
         </Paper>
 
-        <Paper withBorder p="lg" shadow="sm">
+        <Paper
+          withBorder
+          p="lg"
+          shadow="sm"
+          style={{
+            borderColor: '#8b4513',
+            borderWidth: '2px',
+            borderStyle: 'double',
+            backgroundColor: '#fef9e7',
+          }}
+        >
           <Stack gap="md">
             <Group justify="space-between">
-              <Title order={3}>Список авторов</Title>
+              <Title
+                order={3}
+                c="#8b4513"
+                style={{
+                  fontFamily: '"Times New Roman", "Georgia", "Times", serif',
+                  textTransform: 'uppercase',
+                  letterSpacing: '1px',
+                }}
+              >
+                Список авторов
+              </Title>
               <Badge color={activeQuery ? 'grape' : 'blue'} variant="light">
                 {activeQuery ? 'Режим поиска' : 'Полный список'}
               </Badge>
@@ -354,10 +398,30 @@ export const AuthorsPage = () => {
           </Stack>
         </Paper>
 
-        <Paper withBorder p="lg" shadow="sm">
+        <Paper
+          withBorder
+          p="lg"
+          shadow="sm"
+          style={{
+            borderColor: '#8b4513',
+            borderWidth: '2px',
+            borderStyle: 'double',
+            backgroundColor: '#fef9e7',
+          }}
+        >
           <Stack gap="md">
             <Group justify="space-between">
-              <Title order={3}>{formMode === 'create' ? 'Добавить автора' : 'Редактировать автора'}</Title>
+              <Title
+                order={3}
+                c="#8b4513"
+                style={{
+                  fontFamily: '"Times New Roman", "Georgia", "Times", serif',
+                  textTransform: 'uppercase',
+                  letterSpacing: '1px',
+                }}
+              >
+                {formMode === 'create' ? 'Добавить автора' : 'Редактировать автора'}
+              </Title>
               {formMode === 'edit' && (
                 <Button variant="default" onClick={resetForm} disabled={formSubmitting || fetchingAuthor}>
                   Новый автор

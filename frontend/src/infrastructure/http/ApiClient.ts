@@ -2,10 +2,12 @@ import axios, { AxiosInstance, AxiosError, InternalAxiosRequestConfig } from 'ax
 import { TokenStorage } from '@domain/repositories/TokenStorage';
 import { TokenPair } from '@domain/entities/Auth';
 
-// В dev режиме используем относительные пути (через Vite proxy)
+// Определяем baseURL для API
+// В dev режиме всегда используем пустую строку для прокси Vite
+// Прокси Vite будет перенаправлять запросы на backend (внутри Docker сети)
 // В production используем полный URL из env
-const API_BASE_URL = import.meta.env.MODE === 'development' 
-  ? '' 
+const API_BASE_URL = import.meta.env.DEV || import.meta.env.MODE === 'development'
+  ? '' // В dev режиме используем прокси Vite
   : (import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000');
 
 export class ApiClient {

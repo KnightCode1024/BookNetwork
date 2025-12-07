@@ -26,25 +26,49 @@ export const Header = () => {
   };
 
   return (
-    <Box h={60} px="md" style={{ borderBottom: '1px solid var(--mantine-color-gray-3)' }}>
+    <Box
+      h={60}
+      px="md"
+      style={{
+        borderBottom: '3px double #8b4513',
+        backgroundColor: '#fef9e7',
+        backgroundImage: `
+          repeating-linear-gradient(
+            0deg,
+            transparent,
+            transparent 2px,
+            rgba(139, 69, 19, 0.05) 2px,
+            rgba(139, 69, 19, 0.05) 4px
+          )
+        `,
+      }}
+    >
       <Container size="xl" h="100%">
         <Group h="100%" justify="space-between">
           {/* Логотип/Название */}
           <Text
             component={Link}
             to="/"
-            fw={700}
+            fw={900}
             size="xl"
-            c="blue"
-            style={{ textDecoration: 'none' }}
+            c="#8b4513"
+            style={{
+              textDecoration: 'none',
+              fontFamily: '"Times New Roman", "Georgia", "Times", serif',
+              letterSpacing: '2px',
+              textShadow: '1px 1px 2px rgba(0,0,0,0.1)',
+            }}
           >
-            Переплёт
+            ПЕРЕПЛЁТ
           </Text>
 
           {/* Desktop Navigation */}
           <Group visibleFrom="sm" gap="xs">
             {isAuthenticated ? (
               <>
+                <Button variant="light" component={Link} to="/feed">
+                  Лента
+                </Button>
                 <Button variant="light" component={Link} to="/authors">
                   Авторы
                 </Button>
@@ -90,6 +114,9 @@ export const Header = () => {
         <Stack gap="md">
           {isAuthenticated ? (
             <>
+              <Button variant="default" fullWidth component={Link} to="/feed" onClick={close}>
+                Лента
+              </Button>
               <Button variant="default" fullWidth component={Link} to="/authors" onClick={close}>
                 Авторы
               </Button>
